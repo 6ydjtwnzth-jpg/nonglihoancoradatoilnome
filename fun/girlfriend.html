@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Be My Girlfriend?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-1: #ffe6eb;
+    --bg-2: #fff3e2;
+    --paper: #fffaf3;
+    --red: #e5484d;
+    --red-deep: #b9333a;
+    --gold: #f2b84b;
+    --gold-deep: #c98d2a;
+    --pink: #ff9fb4;
+    --pink-soft: #ffd5de;
+    --ink: #5b3936;
+    --ink-soft: #8d6863;
+    --panda: #3d2c2c;
+    --hand: 'Gaegu', 'ZCOOL KuaiLe', 'Comic Sans MS', cursive;
+    --han: 'ZCOOL KuaiLe', 'Gaegu', cursive;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body {
+    background:
+      radial-gradient(120% 80% at 50% 0%, #fff8ef 0%, transparent 60%),
+      radial-gradient(90% 70% at 10% 100%, #ffd9e2 0%, transparent 60%),
+      radial-gradient(90% 70% at 100% 90%, #ffe7cf 0%, transparent 55%),
+      linear-gradient(180deg, var(--bg-1), var(--bg-2));
+    color: var(--ink);
+    font-family: var(--hand);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ---------- decor ---------- */
+  .lantern {
+    position: absolute; top: -6px; width: 64px; height: 120px;
+    transform-origin: 50% 0;
+    animation: swing 4.6s ease-in-out infinite alternate;
+    filter: drop-shadow(0 10px 18px rgba(255, 110, 80, .35));
+    z-index: 1;
+  }
+  .lantern.l1 { left: 6%; }
+  .lantern.l2 { left: 22%; top: -30px; width: 46px; height: 86px; animation-duration: 5.4s; animation-delay: -1.3s; }
+  .lantern.l3 { right: 7%; animation-duration: 5s; animation-delay: -2.2s; }
+  .lantern.l4 { right: 24%; top: -34px; width: 42px; height: 80px; animation-duration: 4.2s; animation-delay: -.7s; }
+  @keyframes swing { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
+
+  .cloud { position: absolute; z-index: 1; opacity: .9; animation: drift 14s ease-in-out infinite alternate; }
+  .cloud.c1 { left: -24px; bottom: 9%; width: 150px; }
+  .cloud.c2 { right: -30px; bottom: 22%; width: 120px; animation-duration: 17s; animation-delay: -5s; }
+  .cloud.c3 { left: 10%; top: 24%; width: 90px; opacity: .6; animation-duration: 19s; }
+  @keyframes drift { from { transform: translateX(-10px); } to { transform: translateX(14px); } }
+
+  /* ---------- card ---------- */
+  .card {
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(90vw, 440px);
+    padding: 18px 22px 28px;
+    background: var(--paper);
+    border: 3px solid var(--red);
+    border-radius: 30px;
+    box-shadow: 0 24px 50px -24px rgba(185, 51, 58, .55), 0 2px 0 #fff inset;
+    text-align: center;
+    z-index: 2;
+  }
+  .card::before {
+    content: ''; position: absolute; inset: 7px;
+    border: 2px dashed var(--gold); border-radius: 22px;
+    pointer-events: none;
+  }
+  .plum { position: absolute; width: 96px; top: -26px; left: -22px; transform: rotate(-12deg); }
+  .seal {
+    position: absolute; right: 18px; bottom: -18px;
+    width: 44px; height: 44px; border-radius: 9px;
+    background: var(--red); color: #fff4e4;
+    font: 28px/44px var(--han);
+    transform: rotate(8deg);
+    box-shadow: 0 4px 0 var(--red-deep);
+  }
+  .panda { width: 128px; height: 118px; display: block; margin: 0 auto 2px; animation: bob 3.2s ease-in-out infinite; }
+  @keyframes bob { 0%, 100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-5px) rotate(1.5deg); } }
+
+  .panda .m-sad, .panda .m-happy, .panda .m-love { display: none; }
+  .panda.sad .m-idle, .panda.happy .m-idle, .panda.love .m-idle { display: none; }
+  .panda.sad .m-sad { display: inline; }
+  .panda.happy .m-happy, .panda.love .m-happy { display: inline; }
+  .panda.love .m-love { display: inline; }
+  .panda.love .m-no-love { display: none; }
+
+  h1 {
+    margin: 0;
+    font: 700 clamp(30px, 8vw, 42px)/1.02 var(--hand);
+    letter-spacing: .3px;
+    color: var(--ink);
+  }
+  .han { margin: 8px 0 0; font: 21px/1.2 var(--han); color: var(--red); letter-spacing: 2px; }
+  .slots { display: flex; justify-content: center; gap: 28px; margin-top: 22px; }
+  .slot { display: block; height: 62px; width: 130px; }
+
+  .yay { display: none; }
+  .card.done .ask { display: none; }
+  .card.done .yay { display: block; animation: pop .7s cubic-bezier(.2, 1.6, .4, 1) both; }
+  .yay h1 { font-size: clamp(44px, 12vw, 60px); color: var(--red); }
+  .yay p { margin: 6px 0 0; font: 700 26px/1.1 var(--hand); color: var(--ink-soft); }
+  @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    position: fixed; left: 0; top: 0; z-index: 10;
+    min-width: 130px; min-height: 62px;
+    padding: 12px 30px 10px;
+    border-radius: 999px;
+    font: 700 34px/1 var(--hand);
+    cursor: pointer;
+    will-change: transform;
+    touch-action: none;
+    outline: none;
+    transform: translate3d(-999px, -999px, 0);
+  }
+  #yes {
+    background: linear-gradient(180deg, #f4686f 0%, #db3f46 100%);
+    color: #fff6e6;
+    border: 3px solid var(--gold);
+    box-shadow: 0 6px 0 var(--red-deep), 0 16px 30px -10px rgba(185, 51, 58, .6);
+    text-shadow: 0 2px 0 rgba(150, 30, 40, .35);
+  }
+  #yes:hover { filter: brightness(1.06) saturate(1.1); }
+  #yes:focus-visible { box-shadow: 0 6px 0 var(--red-deep), 0 0 0 5px rgba(242, 184, 75, .55); }
+  #yes .heart { display: inline-block; font-size: .8em; margin-left: 4px; color: #ffe1a3; }
+  #no {
+    background: #fffaf3;
+    color: var(--ink-soft);
+    border: 3px dashed #d2ada1;
+    box-shadow: 0 5px 0 #ecd9cf;
+  }
+  #no:focus-visible { box-shadow: 0 5px 0 #ecd9cf, 0 0 0 5px rgba(255, 159, 180, .5); }
+  .btn.gone { opacity: 0; pointer-events: none; transition: opacity .6s ease; }
+
+  .bubble {
+    position: fixed; left: 0; top: 0; z-index: 11;
+    padding: 6px 14px 5px;
+    background: #fff; color: var(--red);
+    border: 2px solid var(--pink); border-radius: 16px;
+    font: 22px/1 var(--han);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+  .bubble::after {
+    content: ''; position: absolute; left: 50%; bottom: -8px; width: 12px; height: 12px;
+    background: #fff; border-right: 2px solid var(--pink); border-bottom: 2px solid var(--pink);
+    transform: translateX(-50%) rotate(45deg);
+  }
+  .bubble.show { opacity: 1; }
+
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lantern, .cloud, .panda { animation: none; }
+    .card.done .yay { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="lanternFill" cx="40%" cy="38%" r="70%">
+      <stop offset="0" stop-color="#ff8a7a"/>
+      <stop offset=".55" stop-color="#e5484d"/>
+      <stop offset="1" stop-color="#b9333a"/>
+    </radialGradient>
+    <symbol id="lantern" viewBox="0 0 80 150">
+      <line x1="40" y1="0" x2="40" y2="22" stroke="#c98d2a" stroke-width="2.5"/>
+      <rect x="27" y="19" width="26" height="9" rx="3" fill="#f2b84b"/>
+      <ellipse cx="40" cy="62" rx="34" ry="36" fill="url(#lanternFill)"/>
+      <path d="M40 27Q14 62 40 97M40 27Q66 62 40 97M40 27Q28 62 40 97M40 27Q52 62 40 97" stroke="#a82a31" stroke-width="1.6" fill="none" opacity=".45"/>
+      <path d="M29 58q4-4 8 0M43 58q4-4 8 0" stroke="#5b2125" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+      <path d="M36 66q4 4 8 0" stroke="#5b2125" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <ellipse cx="25" cy="66" rx="5" ry="3" fill="#ffb3b9" opacity=".8"/>
+      <ellipse cx="55" cy="66" rx="5" ry="3" fill="#ffb3b9" opacity=".8"/>
+      <rect x="27" y="96" width="26" height="9" rx="3" fill="#f2b84b"/>
+      <path d="M33 106l-2 34M37.5 106l-.8 37M42.5 106l.8 37M47 106l2 34" stroke="#f2b84b" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="40" cy="108" r="3.5" fill="#c98d2a"/>
+    </symbol>
+    <symbol id="cloud" viewBox="0 0 120 64">
+      <path d="M14 50c-10 0-12-14-2-17 0-13 17-17 24-8 4-14 26-17 32-3 9-7 25-2 24 11 12 1 13 17 2 17z"
+            fill="#fffaf3" stroke="#f6b7c4" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M44 42c0-8 12-8 12-1 0 5-7 5-7 1M74 40c0-7 10-7 10-1 0 4-6 4-6 1" fill="none" stroke="#f6b7c4" stroke-width="2.5" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<svg class="lantern l1"><use href="#lantern"/></svg>
+<svg class="lantern l2"><use href="#lantern"/></svg>
+<svg class="lantern l3"><use href="#lantern"/></svg>
+<svg class="lantern l4"><use href="#lantern"/></svg>
+<svg class="cloud c1" viewBox="0 0 120 64"><use href="#cloud"/></svg>
+<svg class="cloud c2" viewBox="0 0 120 64"><use href="#cloud"/></svg>
+<svg class="cloud c3" viewBox="0 0 120 64"><use href="#cloud"/></svg>
+
+<main class="card" id="card">
+  <!-- plum blossom branch -->
+  <svg class="plum" viewBox="0 0 100 70" aria-hidden="true">
+    <path d="M4 60C24 50 36 40 48 22M30 44c10 2 20 0 30-6M48 22c6-6 10-12 12-18" stroke="#7a4b3e" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <g fill="#ff9fb4" stroke="#ffffff" stroke-width="1.2">
+      <g transform="translate(48 22)"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/><circle r="2.6" fill="#f2b84b" stroke="none"/></g>
+      <g transform="translate(62 36) scale(.8)"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/><circle r="2.6" fill="#f2b84b" stroke="none"/></g>
+      <g transform="translate(22 50) scale(.7)"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/><circle r="2.6" fill="#f2b84b" stroke="none"/></g>
+    </g>
+    <circle cx="60" cy="6" r="3.5" fill="#ffc6d2"/>
+  </svg>
+
+  <!-- panda mascot: mood switched with classes sad / happy / love -->
+  <svg class="panda" id="panda" viewBox="0 0 128 118" aria-hidden="true">
+    <circle cx="30" cy="28" r="15" fill="var(--panda)"/>
+    <circle cx="98" cy="28" r="15" fill="var(--panda)"/>
+    <g transform="translate(104 20) scale(.75)" fill="#ff9fb4" stroke="#fff" stroke-width="1.2">
+      <circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/><circle r="2.6" fill="#f2b84b" stroke="none"/>
+    </g>
+    <ellipse cx="64" cy="64" rx="48" ry="42" fill="#fff" stroke="var(--panda)" stroke-width="3"/>
+    <ellipse cx="44" cy="62" rx="11" ry="14" transform="rotate(-28 44 62)" fill="var(--panda)"/>
+    <ellipse cx="84" cy="62" rx="11" ry="14" transform="rotate(28 84 62)" fill="var(--panda)"/>
+    <!-- eyes -->
+    <g class="m-idle" fill="#fff"><circle cx="46" cy="60" r="4.2"/><circle cx="82" cy="60" r="4.2"/></g>
+    <g class="m-sad"><circle cx="46" cy="63" r="4" fill="#fff"/><circle cx="82" cy="63" r="4" fill="#fff"/>
+      <path d="M36 82c-4 6-4 9-1 10 3 0 4-4 1-10z" fill="#8fd3ff"/></g>
+    <g class="m-happy m-no-love" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M40 63q6-8 12 0M76 63q6-8 12 0"/></g>
+    <g class="m-love" fill="#ff6f86"><path d="M46 68c-9-6-8-12-4-13 2 0 3 1 4 3 1-2 2-3 4-3 4 1 5 7-4 13z"/><path d="M82 68c-9-6-8-12-4-13 2 0 3 1 4 3 1-2 2-3 4-3 4 1 5 7-4 13z"/></g>
+    <ellipse cx="64" cy="74" rx="5.5" ry="3.8" fill="var(--panda)"/>
+    <!-- mouths -->
+    <path class="m-idle" d="M58 80q6 6 12 0" stroke="var(--panda)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    <path class="m-sad" d="M58 86q6-6 12 0" stroke="var(--panda)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    <path class="m-happy" d="M56 79q8 13 16 0z" fill="#ff7d93" stroke="var(--panda)" stroke-width="2.4" stroke-linejoin="round"/>
+    <ellipse cx="30" cy="78" rx="8" ry="5" fill="#ffb3c1" opacity=".85"/>
+    <ellipse cx="98" cy="78" rx="8" ry="5" fill="#ffb3c1" opacity=".85"/>
+  </svg>
+
+  <div class="ask">
+    <h1>Would you like to be my girlfriend?</h1>
+    <p class="han">做我女朋友好吗？</p>
+    <div class="slots">
+      <span class="slot" id="slotYes"></span>
+      <span class="slot" id="slotNo"></span>
+    </div>
+  </div>
+  <div class="yay" aria-live="polite">
+    <h1>Yaaay!!</h1>
+    <p>I knew it ♡</p>
+    <p class="han">我就知道你会答应的～</p>
+  </div>
+  <div class="seal" aria-hidden="true">爱</div>
+</main>
+
+<button class="btn" id="yes" type="button">YES<span class="heart">♥</span></button>
+<button class="btn" id="no" type="button">NO</button>
+<div class="bubble" id="bubble"></div>
+<canvas id="fx"></canvas>
+
+<script>
+(() => {
+  'use strict';
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (s) => document.querySelector(s);
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+  const card = $('#card'), panda = $('#panda'), bubble = $('#bubble');
+  const yesEl = $('#yes'), noEl = $('#no'), slotYes = $('#slotYes'), slotNo = $('#slotNo');
+
+  // ---------- physics bodies (positions are centers) ----------
+  const makeBody = (el) => ({
+    el, x: 0, y: 0, vx: 0, vy: 0, hx: 0, hy: 0, w: 0, h: 0,
+    rot: 0, vr: 0, s: 1, vs: 0, ts: 1, ph: Math.random() * Math.PI * 2,
+  });
+  const yes = makeBody(yesEl), no = makeBody(noEl);
+
+  const STEP = 1 / 240;        // fixed timestep, independent of frame rate
+  const NO_K = 70, NO_C = 10;  // underdamped spring: soft overshoot
+  const YES_K = 24, YES_C = 7; // lazier spring: YES drifts like a puppy
+  const FLEE_R = 115;          // NO starts feeling the cursor from here (px from its edge)
+  const DODGE_R = 48;          // ...and hops away when it gets this close
+  const MARGIN = 14;
+
+  const pointer = { x: -9999, y: -9999, active: false, t: -99 };
+  let W = innerWidth, H = innerHeight;
+  let time = 0, dodges = 0, lastDodge = -99, state = 'ask';
+  let yesAnchor = { x: 0, y: 0 };
+
+  function measure(b) { b.w = b.el.offsetWidth; b.h = b.el.offsetHeight; }
+  function centerOf(el) { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
+
+  function layout(reset) {
+    W = innerWidth; H = innerHeight;
+    measure(yes); measure(no);
+    slotYes.style.width = yes.w + 'px';
+    slotNo.style.width = no.w + 'px';
+    const a = centerOf(slotYes), b = centerOf(slotNo);
+    if (reset) {
+      yes.x = yes.hx = a.x; yes.y = yes.hy = a.y;
+      no.x = no.hx = b.x; no.y = no.hy = b.y;
+      yesAnchor = a;
+    } else {
+      clampHome(no); clampHome(yes);
+      yesAnchor.x = clamp(yesAnchor.x, 0, W); yesAnchor.y = clamp(yesAnchor.y, 0, H);
+    }
+  }
+
+  function halfSize(b) { return { hw: b.w * b.ts / 2 + MARGIN, hh: b.h * b.ts / 2 + MARGIN }; }
+  function clampHome(b) {
+    const { hw, hh } = halfSize(b);
+    b.hx = clamp(b.hx, hw, W - hw);
+    b.hy = clamp(b.hy, hh, H - hh);
+  }
+
+  // distance from a point to the (scaled) button rectangle edge
+  function rectDist(b, px, py) {
+    const dx = Math.max(Math.abs(px - b.x) - b.w * b.s / 2, 0);
+    const dy = Math.max(Math.abs(py - b.y) - b.h * b.s / 2, 0);
+    return Math.hypot(dx, dy);
+  }
+
+  // NO picks a new resting spot: far from the cursor, clear of YES, not absurdly far.
+  function dodge() {
+    if (state !== 'ask') return;
+    const { hw, hh } = halfSize(no);
+    const minFromCursor = Math.min(170, Math.min(W, H) * 0.32);
+    let best = null, bestScore = -Infinity;
+    for (let i = 0; i < 48; i++) {
+      const x = hw + Math.random() * Math.max(1, W - 2 * hw);
+      const y = hh + Math.random() * Math.max(1, H - 2 * hh);
+      const dc = Math.hypot(x - pointer.x, y - pointer.y);
+      if (dc < minFromCursor) continue;
+      const dy = Math.hypot(x - yes.x, y - yes.y);
+      const dm = Math.hypot(x - no.x, y - no.y);
+      const score = Math.min(dc, 340) + 0.6 * Math.min(dy, 200) - 0.3 * Math.max(0, dm - 240) + Math.random() * 30;
+      if (score > bestScore) { bestScore = score; best = { x, y }; }
+    }
+    if (!best) best = { x: W - no.x, y: H - no.y };
+
+    // YES goes to take the spot NO just left
+    yesAnchor = { x: no.x, y: no.y };
+    no.hx = best.x; no.hy = best.y;
+    clampHome(no);
+
+    // a small startled kick + jelly squish
+    let dx = no.x - pointer.x, dy = no.y - pointer.y, l = Math.hypot(dx, dy);
+    if (l < 1) { dx = best.x - no.x; dy = best.y - no.y; l = Math.hypot(dx, dy) || 1; }
+    no.vx += dx / l * 420; no.vy += dy / l * 420;
+    no.vs -= 3.2; yes.vs += 2.2;
+
+    dodges++; lastDodge = time;
+    no.ts = Math.max(0.74, 1 - dodges * 0.035);
+    yes.ts = 1 + Math.min(dodges * 0.06, 0.5);
+    tease();
+  }
+
+  function spring(b, k, c, dt) {
+    b.vx += (k * (b.hx - b.x) - c * b.vx) * dt;
+    b.vy += (k * (b.hy - b.y) - c * b.vy) * dt;
+  }
+
+  function keepInside(b) {
+    const hw = b.w * b.s / 2 + 4, hh = b.h * b.s / 2 + 4;
+    if (b.x < hw) { b.x = hw; b.vx = Math.abs(b.vx) * 0.45; }
+    if (b.x > W - hw) { b.x = W - hw; b.vx = -Math.abs(b.vx) * 0.45; }
+    if (b.y < hh) { b.y = hh; b.vy = Math.abs(b.vy) * 0.45; }
+    if (b.y > H - hh) { b.y = H - hh; b.vy = -Math.abs(b.vy) * 0.45; }
+  }
+
+  function wobble(b, dt) {
+    // rotation lags behind horizontal velocity, scale is a jelly spring
+    const tr = clamp(b.vx * 0.018, -15, 15);
+    b.vr += (170 * (tr - b.rot) - 12 * b.vr) * dt; b.rot += b.vr * dt;
+    b.vs += (230 * (b.ts - b.s) - 8.5 * b.vs) * dt; b.s += b.vs * dt;
+  }
+
+  function step(dt) {
+    time += dt;
+    const live = pointer.active && state === 'ask';
+
+    // --- NO: spring to its spot, pushed by the cursor ---
+    spring(no, NO_K, NO_C, dt);
+    let dNo = Infinity;
+    if (live) {
+      dNo = rectDist(no, pointer.x, pointer.y);
+      if (dNo < FLEE_R) {
+        let dx = no.x - pointer.x, dy = no.y - pointer.y, l = Math.hypot(dx, dy);
+        if (l < 1) { dx = 1; dy = 0; l = 1; }
+        const f = (1 - dNo / FLEE_R) ** 2 * 5200;
+        no.vx += dx / l * f * dt; no.vy += dy / l * f * dt;
+        if (dNo < DODGE_R && time - lastDodge > 0.16) dodge();
+      }
+    }
+
+    // --- YES: drifts toward NO's old spot, leaning toward the cursor ---
+    let tx = yesAnchor.x, ty = yesAnchor.y;
+    if (live) {
+      const idle = time - pointer.t > 2.2;
+      const near = clamp(1 - rectDist(no, pointer.x, pointer.y) / (FLEE_R * 2.4), 0, 1);
+      let pull = dodges > 0 ? Math.min(0.3 + dodges * 0.07, 0.78) : 0.3 * near;
+      if (idle) pull *= 0.4;
+      tx += (pointer.x - tx) * pull; ty += (pointer.y - ty) * pull;
+    }
+    yes.hx = tx; yes.hy = ty; clampHome(yes);
+    spring(yes, YES_K, YES_C, dt);
+
+    // --- soft separation so they never overlap; NO always gives way ---
+    if (state === 'ask') {
+      const dx = no.x - yes.x, dy = no.y - yes.y, l = Math.hypot(dx, dy) || 1;
+      const minD = (Math.max(yes.w, yes.h) * yes.s + Math.max(no.w, no.h) * no.s) * 0.5;
+      if (l < minD) {
+        const f = (minD - l) * 60 * dt;
+        no.vx += dx / l * f; no.vy += dy / l * f;
+        yes.vx -= dx / l * f * 0.25; yes.vy -= dy / l * f * 0.25;
+        if (l < minD * 0.7 && time - lastDodge > 0.4) dodge();
+      }
+    }
+
+    for (const b of [yes, no]) {
+      b.x += b.vx * dt; b.y += b.vy * dt;
+      wobble(b, dt);
+      if (state === 'ask') keepInside(b);
+    }
+    return dNo;
+  }
+
+  // ---------- rendering ----------
+  function place(b) {
+    const sp = Math.hypot(b.vx, b.vy);
+    const st = Math.min(sp / 2800, 0.14);           // stretch along the velocity
+    const ang = Math.atan2(b.vy, b.vx) * 180 / Math.PI;
+    const breathe = reduced ? 0 : Math.sin(time * 2.1 + b.ph);
+    const by = breathe * 2.2, bs = breathe * 0.012;
+    b.el.style.transform =
+      `translate3d(${b.x - b.w / 2}px, ${b.y - b.h / 2 + by}px, 0) ` +
+      `rotate(${ang}deg) scale(${1 + st}, ${1 - st * 0.6}) rotate(${-ang}deg) ` +
+      `rotate(${b.rot}deg) scale(${b.s + bs})`;
+  }
+
+  let mood = '';
+  function setMood(m) { if (m !== mood) { panda.classList.remove(mood || 'x'); if (m) panda.classList.add(m); mood = m; } }
+
+  // ---------- teasing bubble ----------
+  const teases = ['nope~', '抓不到我～', 'hehe', 'too slow!', '不要嘛～', 'try YES?', '哼～', 'nuh-uh', '再试试？'];
+  let bubbleTimer = 0, bubbleShownAt = -99, teaseIdx = 0;
+  function tease() {
+    if (time - bubbleShownAt < 0.7) return;
+    bubbleShownAt = time;
+    bubble.textContent = teases[teaseIdx++ % teases.length];
+    bubble.classList.add('show');
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(() => bubble.classList.remove('show'), 1100);
+  }
+  function placeBubble() {
+    const bw = bubble.offsetWidth, bh = bubble.offsetHeight;
+    let x = clamp(no.x - bw / 2, 6, W - bw - 6);
+    let y = no.y - no.h * no.s / 2 - bh - 14;
+    if (y < 6) y = no.y + no.h * no.s / 2 + 14;
+    bubble.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  }
+
+  // ---------- petals & hearts ----------
+  const cv = $('#fx'), ctx = cv.getContext('2d');
+  let dpr = 1;
+  const parts = [];
+  const petalColors = ['#ffb7c8', '#ffc9d5', '#ff9fb4', '#ffd8e0'];
+  const heartColors = ['#e5484d', '#ff6f86', '#ff9fb4', '#f2b84b'];
+
+  function resizeCanvas() {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    cv.width = W * dpr; cv.height = H * dpr;
+  }
+  function petal(top) {
+    return {
+      kind: 'petal', x: Math.random() * W, y: top ? -20 : Math.random() * H,
+      vy: 22 + Math.random() * 30, size: 5 + Math.random() * 5,
+      rot: Math.random() * 6.28, vr: (Math.random() - .5) * 1.4,
+      ph: Math.random() * 6.28, sway: 18 + Math.random() * 26, fr: .6 + Math.random() * .8,
+      color: petalColors[(Math.random() * petalColors.length) | 0], life: Infinity, alpha: .75,
+    };
+  }
+  function heart(x, y, vx, vy, size, life) {
+    return {
+      kind: 'heart', x, y, vx, vy, size, life, age: 0,
+      rot: (Math.random() - .5) * .6, vr: (Math.random() - .5) * 3,
+      color: heartColors[(Math.random() * heartColors.length) | 0], alpha: 1,
+    };
+  }
+  function seedPetals() {
+    if (reduced) return;
+    const n = Math.min(34, Math.round(W * H / 26000));
+    for (let i = 0; i < n; i++) parts.push(petal(false));
+  }
+  function burst(x, y) {
+    const n = reduced ? 24 : 90;
+    for (let i = 0; i < n; i++) {
+      const a = -Math.PI / 2 + (Math.random() - .5) * Math.PI * 1.7;
+      const sp = 260 + Math.random() * 520;
+      parts.push(heart(x, y, Math.cos(a) * sp, Math.sin(a) * sp, 7 + Math.random() * 10, 2.2 + Math.random() * 1.6));
+    }
+  }
+
+  function drawPetal(p, t) {
+    const s = p.size;
+    ctx.save();
+    ctx.translate(p.x + Math.sin(t * p.fr + p.ph) * p.sway, p.y);
+    ctx.rotate(p.rot);
+    ctx.scale(Math.cos(t * p.fr * 1.7 + p.ph), 1); // flutter
+    ctx.globalAlpha = p.alpha;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.moveTo(0, s);
+    ctx.bezierCurveTo(-s * .95, s * .3, -s * .8, -s * .8, -s * .18, -s * .95);
+    ctx.lineTo(0, -s * .7);
+    ctx.lineTo(s * .18, -s * .95);
+    ctx.bezierCurveTo(s * .8, -s * .8, s * .95, s * .3, 0, s);
+    ctx.fill();
+    ctx.restore();
+  }
+  function drawHeart(p) {
+    const s = p.size;
+    ctx.save();
+    ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+    ctx.globalAlpha = p.alpha;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.moveTo(0, s * .9);
+    ctx.bezierCurveTo(-s * 1.4, 0, -s * .6, -s * 1.15, 0, -s * .35);
+    ctx.bezierCurveTo(s * .6, -s * 1.15, s * 1.4, 0, 0, s * .9);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function updateParts(dt) {
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const p = parts[i];
+      if (p.kind === 'petal') {
+        p.y += p.vy * dt; p.rot += p.vr * dt;
+        if (p.y > H + 20) Object.assign(p, petal(true));
+      } else {
+        p.age += dt;
+        p.vy += 520 * dt;
+        p.vx *= Math.exp(-1.6 * dt); p.vy *= Math.exp(-1.2 * dt);
+        p.x += p.vx * dt; p.y += p.vy * dt; p.rot += p.vr * dt;
+        p.alpha = clamp(1 - (p.age - p.life * .6) / (p.life * .4), 0, 1);
+        if (p.age > p.life || p.y > H + 40) parts.splice(i, 1);
+      }
+    }
+  }
+  function drawParts() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    for (const p of parts) p.kind === 'petal' ? drawPetal(p, time) : drawHeart(p);
+  }
+
+  // ---------- yes! ----------
+  let rainUntil = 0;
+  function celebrate() {
+    if (state !== 'ask') return;
+    state = 'yes';
+    burst(yes.x, yes.y);
+    yesEl.classList.add('gone'); noEl.classList.add('gone');
+    yes.ts = 1.6; yes.vs += 4;
+    no.hx = no.x; no.hy = -200; no.ts = 0.4;
+    bubble.classList.remove('show');
+    card.classList.add('done');
+    setMood('love');
+    rainUntil = time + (reduced ? 0 : 4);
+  }
+
+  // ---------- input ----------
+  function track(e) { pointer.x = e.clientX; pointer.y = e.clientY; pointer.active = true; pointer.t = time; }
+  addEventListener('pointermove', track, { passive: true });
+  addEventListener('pointerdown', track, { passive: true });
+  document.documentElement.addEventListener('pointerleave', () => { pointer.active = false; });
+
+  // in case the NO is ever reached (fast flick, touch tap, keyboard): it still slips away
+  noEl.addEventListener('pointerdown', (e) => { e.preventDefault(); track(e); dodge(); });
+  noEl.addEventListener('click', (e) => { e.preventDefault(); dodge(); });
+  noEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      pointer.x = no.x; pointer.y = no.y; pointer.active = true; pointer.t = time;
+      dodge();
+      yesEl.focus();
+    }
+  });
+  yesEl.addEventListener('click', celebrate);
+
+  addEventListener('resize', () => { layout(dodges === 0 && state === 'ask'); resizeCanvas(); });
+
+  // ---------- loop ----------
+  let last = performance.now(), acc = 0, rainAcc = 0;
+  function frame(now) {
+    const dt = Math.min((now - last) / 1000, 0.05);
+    last = now; acc += dt;
+    let dNo = Infinity;
+    while (acc >= STEP) { dNo = step(STEP); acc -= STEP; }
+
+    if (state === 'ask') {
+      const overYes = pointer.active && rectDist(yes, pointer.x, pointer.y) < 6;
+      setMood(overYes ? 'happy' : dNo < FLEE_R * 1.3 ? 'sad' : '');
+    } else if (time < rainUntil) {
+      rainAcc += dt;
+      while (rainAcc > 0.06) { rainAcc -= 0.06; parts.push(heart(Math.random() * W, -20, (Math.random() - .5) * 40, 60 + Math.random() * 80, 6 + Math.random() * 8, 5)); }
+    }
+
+    updateParts(dt);
+    place(yes); place(no); placeBubble();
+    drawParts();
+    requestAnimationFrame(frame);
+  }
+
+  function start() {
+    layout(true);
+    resizeCanvas();
+    seedPetals();
+    requestAnimationFrame((t) => { last = t; requestAnimationFrame(frame); });
+  }
+  // re-measure once the handwritten fonts arrive (button sizes change)
+  layout(true);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => { if (dodges === 0) layout(true); });
+  }
+  start();
+})();
+</script>
+</body>
+</html>
