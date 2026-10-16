@@ -305,6 +305,10 @@
   const FLEE_R = 115;          // NO starts feeling the cursor from here (px from its edge)
   const DODGE_R = 48;          // ...and hops away when it gets this close
   const MARGIN = 14;
+  const EDGE = 6;              // YES never gets closer than this to the screen edge
+
+  // soft saturation: linear up to 0.8, then eases toward 1 (never past it)
+  const soft = (r) => (r < 0.8 ? r : 0.8 + 0.2 * (1 - Math.exp(-(r - 0.8) / 0.2)));
 
   const pointer = { x: -9999, y: -9999, active: false, t: -99 };
   let W = innerWidth, H = innerHeight;
@@ -312,10 +316,22 @@
   let yesAnchor = { x: 0, y: 0 };
 
   function measure(b) { b.w = b.el.offsetWidth; b.h = b.el.offsetHeight; }
+
+  // Visible box of a body. YES behaves like a balloon in a box: past the screen size
+  // it is squeezed to fit, and what is squeezed on one axis bulges on the other.
+  function boxOf(b) {
+    let nw = b.w * b.s, nh = b.h * b.s;
+    if (b !== yes) return { dw: nw, dh: nh };
+    const aw = W - 2 * EDGE, ah = H - 2 * EDGE;
+    const cx = soft(nw / aw) * aw / nw, cy = soft(nh / ah) * ah / nh;
+    nw *= Math.pow(1 / cy, 0.35); nh *= Math.pow(1 / cx, 0.35);
+    return { dw: soft(nw / aw) * aw, dh: soft(nh / ah) * ah };
+  }
   function centerOf(el) { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
 
   function layout(reset) {
     W = innerWidth; H = innerHeight;
+    for (const k of ['width', 'height', 'fontSize', 'padding', 'borderWidth', 'boxShadow', 'borderRadius']) yesEl.style[k] = '';
     measure(yes); measure(no);
     slotYes.style.width = yes.w + 'px';
     slotNo.style.width = no.w + 'px';
@@ -339,8 +355,9 @@
 
   // distance from a point to the (scaled) button rectangle edge
   function rectDist(b, px, py) {
-    const dx = Math.max(Math.abs(px - b.x) - b.w * b.s / 2, 0);
-    const dy = Math.max(Math.abs(py - b.y) - b.h * b.s / 2, 0);
+    const { dw, dh } = boxOf(b);
+    const dx = Math.max(Math.abs(px - b.x) - dw / 2, 0);
+    const dy = Math.max(Math.abs(py - b.y) - dh / 2, 0);
     return Math.hypot(dx, dy);
   }
 
@@ -380,9 +397,9 @@
     tease();
   }
 
-  // YES keeps growing with every dodge until it fills the whole screen
+  // YES keeps growing with every dodge until, squeezed, it fills the whole screen
   function yesGrowth() {
-    const fill = Math.max(W / yes.w, H / yes.h) * 1.15;
+    const fill = Math.max((W - 2 * EDGE) / yes.w, (H - 2 * EDGE) / yes.h) * 1.5;
     return Math.min(Math.pow(1.22, dodges), fill);
   }
 
@@ -394,7 +411,7 @@
   // Rubbery walls: the body sinks in a little, squashes flat against the edge,
   // gets pushed back out and wobbles. A body bigger than the screen just overflows.
   function walls(b, dt) {
-    const hw = b.w * b.s / 2, hh = b.h * b.s / 2;
+    const box = boxOf(b), hw = box.dw / 2, hh = box.dh / 2;
     const fitsX = 2 * hw < W, fitsY = 2 * hh < H;
     const penL = Math.max(0, hw - b.x), penR = Math.max(0, b.x + hw - W);
     const penT = Math.max(0, hh - b.y), penB = Math.max(0, b.y + hh - H);
@@ -469,16 +486,46 @@
 
   // ---------- rendering ----------
   function place(b) {
+    const isYes = b === yes;
+    const { dw, dh } = boxOf(b);
+    // the closer YES gets to filling the screen, the calmer it moves
+    const calm = isYes ? clamp(1.25 - Math.max(dw / W, dh / H), 0, 1) : 1;
     const sp = Math.hypot(b.vx, b.vy);
-    const st = Math.min(sp / 2800, 0.14);           // stretch along the velocity
+    const st = Math.min(sp / 2800, 0.14) * calm;    // stretch along the velocity
     const ang = Math.atan2(b.vy, b.vx) * 180 / Math.PI;
-    const breathe = reduced ? 0 : Math.sin(time * 2.1 + b.ph);
-    const by = breathe * 2.2, bs = breathe * 0.012;
+    const breathe = reduced ? 0 : Math.sin(time * 2.1 + b.ph) * calm;
+    const base = (isYes ? 1 : b.s) + breathe * 0.012;
+    const sx = base * (1 - b.qx) * (1 + b.qy * 0.45);
+    const sy = base * (1 - b.qy) * (1 + b.qx * 0.45);
+    const rot = b.rot * calm;
+
+    // YES is resized for real (not scaled) so the text stays crisp and unsquashed
+    const elW = isYes ? dw : b.w, elH = isYes ? dh : b.h;
+    if (isYes) {
+      const fs = Math.min(dw / b.w, dh / b.h), lw = Math.sqrt(fs);
+      const st_ = b.el.style;
+      st_.width = dw + 'px'; st_.height = dh + 'px'; st_.padding = '0';
+      st_.fontSize = 34 * fs + 'px';
+      // pressed against the screen, the balloon's round ends flatten into the corners
+      const press = clamp((Math.min(dw / (W - 2 * EDGE), dh / (H - 2 * EDGE)) - 0.75) / 0.25, 0, 1);
+      st_.borderRadius = Math.min(dw, dh) * (0.5 - 0.36 * press) + 'px';
+      st_.borderWidth = 3 * lw + 'px';
+      st_.boxShadow = `0 ${6 * lw}px 0 var(--red-deep), 0 ${16 * lw}px ${30 * lw}px -${10 * lw}px rgba(185, 51, 58, .6)`;
+    }
+
+    let cx = b.x, cy = b.y + breathe * 2.2;
+    if (isYes && state === 'ask') {
+      // keep the whole (rotated, squashed) box on screen: never clipped
+      const r = rot * Math.PI / 180, c = Math.abs(Math.cos(r)), s = Math.abs(Math.sin(r));
+      const rw = elW / 2 * sx * (1 + st), rh = elH / 2 * sy * (1 + st);
+      const ex = rw * c + rh * s + 2, ey = rw * s + rh * c + 2 + 6 * Math.sqrt(dh / b.h);
+      cx = 2 * ex > W ? W / 2 : clamp(cx, ex, W - ex);
+      cy = 2 * ey > H ? H / 2 : clamp(cy, ey, H - ey);
+    }
     b.el.style.transform =
-      `translate3d(${b.x - b.w / 2}px, ${b.y - b.h / 2 + by}px, 0) ` +
+      `translate3d(${cx - elW / 2}px, ${cy - elH / 2}px, 0) ` +
       `rotate(${ang}deg) scale(${1 + st}, ${1 - st * 0.6}) rotate(${-ang}deg) ` +
-      `rotate(${b.rot}deg) ` +
-      `scale(${(b.s + bs) * (1 - b.qx) * (1 + b.qy * 0.45)}, ${(b.s + bs) * (1 - b.qy) * (1 + b.qx * 0.45)})`;
+      `rotate(${rot}deg) scale(${sx}, ${sy})`;
   }
 
   let mood = '';
