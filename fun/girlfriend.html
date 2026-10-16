@@ -112,6 +112,17 @@
   .card.done .yay { display: block; animation: pop .7s cubic-bezier(.2, 1.6, .4, 1) both; }
   .yay h1 { font-size: clamp(44px, 12vw, 60px); color: var(--red); }
   .yay p { margin: 6px 0 0; font: 700 26px/1.1 var(--hand); color: var(--ink-soft); }
+  .again {
+    margin-top: 16px; min-height: 48px; padding: 8px 22px 6px;
+    background: #fffaf3; color: var(--red);
+    border: 2.5px solid var(--pink); border-radius: 999px;
+    box-shadow: 0 4px 0 var(--pink-soft);
+    font: 700 26px/1 var(--hand);
+    cursor: pointer;
+  }
+  .again:hover { background: #fff0f3; }
+  .again:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--pink-soft); }
+  .again:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
   @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
   /* ---------- buttons ---------- */
@@ -259,6 +270,7 @@
     <h1>Yaaay!!</h1>
     <p>I knew it ♡</p>
     <p class="han">我就知道你会答应的～</p>
+    <button class="again" id="again" type="button">↺ again</button>
   </div>
   <div class="seal" aria-hidden="true">爱</div>
 </main>
@@ -598,6 +610,7 @@
     }
   });
   yesEl.addEventListener('click', celebrate);
+  $('#again').addEventListener('click', () => location.reload());
 
   addEventListener('resize', () => { layout(dodges === 0 && state === 'ask'); resizeCanvas(); });
 
