@@ -133,12 +133,12 @@
     border-radius: 999px;
     font: 700 34px/1 var(--hand);
     cursor: pointer;
-    will-change: transform;
     touch-action: none;
     outline: none;
     transform: translate3d(-999px, -999px, 0);
   }
   #yes {
+    z-index: 12; /* always on top of NO */
     background: linear-gradient(180deg, #f4686f 0%, #db3f46 100%);
     color: #fff6e6;
     border: 3px solid var(--gold);
@@ -158,7 +158,7 @@
   .btn.gone { opacity: 0; pointer-events: none; transition: opacity .6s ease; }
 
   .bubble {
-    position: fixed; left: 0; top: 0; z-index: 11;
+    position: fixed; left: 0; top: 0; z-index: 13;
     padding: 6px 14px 5px;
     background: #fff; color: var(--red);
     border: 2px solid var(--pink); border-radius: 16px;
@@ -295,6 +295,7 @@
   const makeBody = (el) => ({
     el, x: 0, y: 0, vx: 0, vy: 0, hx: 0, hy: 0, w: 0, h: 0,
     rot: 0, vr: 0, s: 1, vs: 0, ts: 1, ph: Math.random() * Math.PI * 2,
+    qx: 0, vqx: 0, qy: 0, vqy: 0, // rubbery squash against the walls
   });
   const yes = makeBody(yesEl), no = makeBody(noEl);
 
@@ -332,8 +333,8 @@
   function halfSize(b) { return { hw: b.w * b.ts / 2 + MARGIN, hh: b.h * b.ts / 2 + MARGIN }; }
   function clampHome(b) {
     const { hw, hh } = halfSize(b);
-    b.hx = clamp(b.hx, hw, W - hw);
-    b.hy = clamp(b.hy, hh, H - hh);
+    b.hx = 2 * hw > W ? W / 2 : clamp(b.hx, hw, W - hw);
+    b.hy = 2 * hh > H ? H / 2 : clamp(b.hy, hh, H - hh);
   }
 
   // distance from a point to the (scaled) button rectangle edge
@@ -379,10 +380,10 @@
     tease();
   }
 
-  // YES keeps growing with every dodge, up to what still fits on screen
+  // YES keeps growing with every dodge until it fills the whole screen
   function yesGrowth() {
-    const cap = Math.max(1, Math.min((W * 0.86) / yes.w, (H * 0.42) / yes.h));
-    return Math.min(1 + dodges * 0.16, cap);
+    const fill = Math.max(W / yes.w, H / yes.h) * 1.15;
+    return Math.min(Math.pow(1.22, dodges), fill);
   }
 
   function spring(b, k, c, dt) {
@@ -390,12 +391,24 @@
     b.vy += (k * (b.hy - b.y) - c * b.vy) * dt;
   }
 
-  function keepInside(b) {
-    const hw = b.w * b.s / 2 + 4, hh = b.h * b.s / 2 + 4;
-    if (b.x < hw) { b.x = hw; b.vx = Math.abs(b.vx) * 0.45; }
-    if (b.x > W - hw) { b.x = W - hw; b.vx = -Math.abs(b.vx) * 0.45; }
-    if (b.y < hh) { b.y = hh; b.vy = Math.abs(b.vy) * 0.45; }
-    if (b.y > H - hh) { b.y = H - hh; b.vy = -Math.abs(b.vy) * 0.45; }
+  // Rubbery walls: the body sinks in a little, squashes flat against the edge,
+  // gets pushed back out and wobbles. A body bigger than the screen just overflows.
+  function walls(b, dt) {
+    const hw = b.w * b.s / 2, hh = b.h * b.s / 2;
+    const fitsX = 2 * hw < W, fitsY = 2 * hh < H;
+    const penL = Math.max(0, hw - b.x), penR = Math.max(0, b.x + hw - W);
+    const penT = Math.max(0, hh - b.y), penB = Math.max(0, b.y + hh - H);
+    b.vx += (penL - penR) * 900 * dt;
+    b.vy += (penT - penB) * 900 * dt;
+    if (penL || penR) b.vx *= Math.exp(-5 * dt);
+    if (penT || penB) b.vy *= Math.exp(-5 * dt);
+    if (fitsX) b.x = clamp(b.x, hw * 0.6, W - hw * 0.6);
+    if (fitsY) b.y = clamp(b.y, hh * 0.6, H - hh * 0.6);
+    // squashing about the center by pen/hw keeps the visible edge right on the wall
+    const tqx = fitsX ? clamp(Math.max(penL, penR) / hw, 0, 0.32) : 0;
+    const tqy = fitsY ? clamp(Math.max(penT, penB) / hh, 0, 0.32) : 0;
+    b.vqx += (420 * (tqx - b.qx) - 12 * b.vqx) * dt; b.qx += b.vqx * dt;
+    b.vqy += (420 * (tqy - b.qy) - 12 * b.vqy) * dt; b.qy += b.vqy * dt;
   }
 
   function wobble(b, dt) {
@@ -436,21 +449,20 @@
     spring(yes, YES_K, YES_C, dt);
 
     // --- soft separation so they never overlap; NO always gives way ---
-    if (state === 'ask') {
+    if (state === 'ask' && yes.s < 1.8) {
       const dx = no.x - yes.x, dy = no.y - yes.y, l = Math.hypot(dx, dy) || 1;
       const minD = (Math.max(yes.w, yes.h) * yes.s + Math.max(no.w, no.h) * no.s) * 0.5;
       if (l < minD) {
         const f = (minD - l) * 60 * dt;
         no.vx += dx / l * f; no.vy += dy / l * f;
         yes.vx -= dx / l * f * 0.25; yes.vy -= dy / l * f * 0.25;
-        if (l < minD * 0.7 && time - lastDodge > 0.4) dodge();
       }
     }
 
     for (const b of [yes, no]) {
       b.x += b.vx * dt; b.y += b.vy * dt;
       wobble(b, dt);
-      if (state === 'ask') keepInside(b);
+      if (state === 'ask') walls(b, dt);
     }
     return dNo;
   }
@@ -465,7 +477,8 @@
     b.el.style.transform =
       `translate3d(${b.x - b.w / 2}px, ${b.y - b.h / 2 + by}px, 0) ` +
       `rotate(${ang}deg) scale(${1 + st}, ${1 - st * 0.6}) rotate(${-ang}deg) ` +
-      `rotate(${b.rot}deg) scale(${b.s + bs})`;
+      `rotate(${b.rot}deg) ` +
+      `scale(${(b.s + bs) * (1 - b.qx) * (1 + b.qy * 0.45)}, ${(b.s + bs) * (1 - b.qy) * (1 + b.qx * 0.45)})`;
   }
 
   let mood = '';
@@ -591,7 +604,7 @@
     state = 'yes';
     burst(yes.x, yes.y);
     yesEl.classList.add('gone'); noEl.classList.add('gone');
-    yes.ts = 1.6; yes.vs += 4;
+    yes.ts = yes.s * 1.15; yes.vs += 4;
     no.hx = no.x; no.hy = -200; no.ts = 0.4;
     bubble.classList.remove('show');
     card.classList.add('done');
