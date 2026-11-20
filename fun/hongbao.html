@@ -3,38 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kitten Red Envelope</title>
+<title>Magpie Bridge</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
 <style>
   :root {
-    --night-1: #1b0e2c;
-    --night-2: #3f1636;
-    --night-3: #7a2440;
-    --red: #dc3b40;
-    --red-deep: #b0272f;
-    --red-dark: #7c1820;
-    --gold: #f4c25b;
-    --gold-deep: #c98d2a;
-    --gold-soft: #ffe6a8;
-    --paper: #fff8ec;
-    --ink: #4a2a28;
-    --ink-soft: #86625c;
-    --pink: #ff9fb4;
+    --lacquer: #8f1a20;
+    --lacquer-deep: #5c0d13;
+    --lacquer-dark: #3e070c;
+    --red: #d8363c;
+    --red-deep: #ad252d;
+    --red-dark: #761720;
+    --gold: #e9b95a;
+    --gold-bright: #f7d68a;
+    --gold-deep: #b9832a;
+    --paper: #fbf3e2;
+    --ink: #3b2220;
+    --ink-soft: #7a5650;
     --cat: #fffaf4;
-    --cat-line: #4a2a28;
-    --cat-orange: #f5a55a;
-    --hand: 'Gaegu', 'ZCOOL KuaiLe', cursive;
+    --cat-line: #3b2220;
+    --cat-orange: #f0a057;
+    --night: #0d1130;
+    --hand: 'Caveat', 'ZCOOL KuaiLe', cursive;
     --brush: 'Ma Shan Zheng', 'ZCOOL KuaiLe', serif;
-    --cute: 'ZCOOL KuaiLe', 'Gaegu', cursive;
+    --cute: 'ZCOOL KuaiLe', 'Caveat', cursive;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; overflow: hidden; }
   body {
     background:
-      radial-gradient(70% 45% at 80% 8%, rgba(255, 214, 150, .18), transparent 70%),
-      linear-gradient(180deg, var(--night-1) 0%, var(--night-2) 55%, var(--night-3) 100%);
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cg fill='none' stroke='%23e9b95a' stroke-opacity='.07' stroke-width='2'%3E%3Cpath d='M6 6h52v52H6z'/%3E%3Cpath d='M18 18h28v28H18z'/%3E%3Cpath d='M32 18v14h-8'/%3E%3C/g%3E%3C/svg%3E"),
+      radial-gradient(90% 70% at 50% 40%, var(--lacquer) 0%, var(--lacquer-deep) 70%, var(--lacquer-dark) 100%);
     color: var(--ink);
     font-family: var(--hand);
     user-select: none;
@@ -42,92 +42,133 @@
     -webkit-tap-highlight-color: transparent;
     cursor: pointer;
   }
-  canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-  #sky { z-index: 0; }
-  #fx { z-index: 4; } /* hearts float behind the scroll so the text stays readable */
 
-  /* ---------- sky decor ---------- */
-  .moon {
-    position: fixed; top: 7%; right: 9%; width: 84px; height: 84px; border-radius: 50%;
-    background: radial-gradient(circle at 38% 35%, #fffbe8 0%, #ffeaa8 55%, #f7cf78 100%);
-    box-shadow: 0 0 40px 10px rgba(255, 226, 150, .35), 0 0 120px 40px rgba(255, 200, 120, .15);
-    z-index: 1;
-  }
-  .branch { position: fixed; top: -10px; left: -14px; width: 190px; z-index: 1; opacity: .95; }
-  .sky-lantern {
-    position: fixed; bottom: -60px; z-index: 1;
-    width: 22px; height: 28px;
-    border-radius: 45% 45% 22% 22%;
-    background: linear-gradient(180deg, #ffb35c, #e2513c);
-    box-shadow: 0 0 18px 6px rgba(255, 150, 70, .35);
-    opacity: .85;
-    animation: rise linear infinite;
-  }
-  .sky-lantern::after {
-    content: ''; position: absolute; left: 50%; bottom: 3px; width: 6px; height: 6px; margin-left: -3px;
-    border-radius: 50%; background: #fff3c4; box-shadow: 0 0 8px 3px #ffd27a;
-  }
-  @keyframes rise {
-    0%   { transform: translate(0, 0) scale(var(--s, 1)); opacity: 0; }
-    8%   { opacity: .85; }
-    50%  { transform: translate(var(--sway, 20px), -55vh) scale(var(--s, 1)); }
-    92%  { opacity: .7; }
-    100% { transform: translate(0, -115vh) scale(calc(var(--s, 1) * .7)); opacity: 0; }
-  }
+  /* ---------- palace frame ---------- */
+  .frame { position: fixed; inset: 10px; border: 1.5px solid rgba(233, 185, 90, .55); pointer-events: none; z-index: 1; }
+  .frame::before { content: ''; position: absolute; inset: 5px; border: 1px solid rgba(233, 185, 90, .28); }
+  .corner { position: fixed; width: 46px; height: 46px; z-index: 1; pointer-events: none; }
+  .corner.tl { top: 6px; left: 6px; }
+  .corner.tr { top: 6px; right: 6px; transform: scaleX(-1); }
+  .corner.bl { bottom: 6px; left: 6px; transform: scaleY(-1); }
+  .corner.br { bottom: 6px; right: 6px; transform: scale(-1, -1); }
 
-  /* ---------- scene (natural size 380x700, scaled to fit) ---------- */
+  .palace-lantern {
+    position: fixed; top: -4px; width: 42px; height: 128px; z-index: 2; pointer-events: none;
+    transform-origin: 50% 0;
+    animation: swing 5s ease-in-out infinite alternate;
+    filter: drop-shadow(0 8px 16px rgba(255, 120, 60, .35));
+  }
+  .palace-lantern.l { left: 7%; }
+  .palace-lantern.r { right: 7%; animation-delay: -2.4s; animation-duration: 5.6s; }
+  @keyframes swing { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+
+  canvas#fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 6; }
+
+  /* ---------- scene: natural 380x760, scaled to fit ---------- */
   .scene {
     position: fixed; left: 50%; top: 50%;
-    width: 380px; height: 700px;
+    width: 380px; height: 760px;
     transform: translate(-50%, -50%) scale(var(--fit, 1));
     z-index: 5;
   }
 
+  /* moon gate with lattice doors */
+  .gate {
+    position: absolute; left: 55px; top: 14px; width: 270px; height: 270px;
+    border-radius: 50%; overflow: hidden;
+    background: var(--night);
+    box-shadow:
+      0 0 0 4px var(--gold),
+      0 0 0 12px #6a0f15,
+      0 0 0 14px var(--gold-deep),
+      0 24px 50px -12px rgba(0, 0, 0, .65);
+    -webkit-mask-image: -webkit-radial-gradient(white, black); /* keeps the clip round on Safari */
+  }
+  .gate canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .door {
+    position: absolute; top: 0; width: 50%; height: 100%;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Cg fill='none' stroke='%237a1418' stroke-width='3'%3E%3Cpath d='M0 0h30v30H0z'/%3E%3Cpath d='M15 4L26 15L15 26L4 15z'/%3E%3C/g%3E%3C/svg%3E"),
+      radial-gradient(circle at 100% 50%, #fff3cf, #f2c074 60%, #c98340);
+    transition: transform 1.5s cubic-bezier(.6, 0, .25, 1);
+  }
+  .door.l { left: 0; border-right: 4px solid #6a0f15; background-position: 0 0, 0 0; }
+  .door.r { right: 0; border-left: 4px solid #6a0f15; background-position: 0 0, 0 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Cg fill='none' stroke='%237a1418' stroke-width='3'%3E%3Cpath d='M0 0h30v30H0z'/%3E%3Cpath d='M15 4L26 15L15 26L4 15z'/%3E%3C/g%3E%3C/svg%3E"),
+      radial-gradient(circle at 0% 50%, #fff3cf, #f2c074 60%, #c98340); }
+  .door .ring {
+    position: absolute; top: 50%; width: 22px; height: 22px; margin-top: -11px; border-radius: 50%;
+    border: 3px solid var(--gold-deep); background: radial-gradient(circle, var(--gold-bright), var(--gold-deep));
+    box-shadow: 0 2px 3px rgba(0, 0, 0, .35);
+  }
+  .door.l .ring { right: 8px; }
+  .door.r .ring { left: 8px; }
+  .gate.open .door.l { transform: translateX(-104%); }
+  .gate.open .door.r { transform: translateX(104%); }
+  .gate-knot { position: absolute; left: 175px; top: 284px; width: 30px; height: 64px; z-index: 1; pointer-events: none;
+    transform-origin: 50% 0; animation: swing 3.6s ease-in-out infinite alternate; }
+
   /* message scroll */
   .note {
-    position: absolute; left: 14px; right: 14px; bottom: 474px;
-    padding: 22px 22px 16px;
-    background: var(--paper);
-    border-radius: 6px;
-    box-shadow: 0 18px 40px -16px rgba(0, 0, 0, .6);
+    position: absolute; left: 14px; right: 14px; top: 302px;
+    padding: 16px 22px 12px;
+    background:
+      radial-gradient(120% 90% at 50% 0%, #fffaf0, var(--paper));
+    border-radius: 4px;
+    box-shadow: 0 18px 40px -16px rgba(0, 0, 0, .65), inset 0 0 0 1px rgba(185, 131, 42, .35), inset 0 0 0 5px var(--paper), inset 0 0 0 6px rgba(185, 131, 42, .3);
     text-align: center;
-    opacity: 0; transform: translateY(16px) scale(.96);
+    opacity: 0; transform: translateY(14px) scale(.97);
     transition: opacity .5s ease, transform .6s cubic-bezier(.2, 1.4, .4, 1);
     pointer-events: none;
+    z-index: 3;
   }
   .note::before, .note::after {
-    content: ''; position: absolute; left: -10px; right: -10px; height: 12px; border-radius: 6px;
-    background: linear-gradient(180deg, #9a3a2a, #6e2219);
-    box-shadow: inset 0 0 0 2px rgba(244, 194, 91, .35);
+    content: ''; position: absolute; left: -9px; right: -9px; height: 11px; border-radius: 6px;
+    background: linear-gradient(180deg, #8a2a1e, #561710);
+    box-shadow: inset 0 0 0 1.5px rgba(233, 185, 90, .55);
   }
-  .note::before { top: -7px; }
-  .note::after { bottom: -7px; }
+  .note::before { top: -6px; }
+  .note::after { bottom: -6px; }
   .show-note .note { opacity: 1; transform: none; pointer-events: auto; }
-  .zh { margin: 0; font: 31px/1.38 var(--brush); color: var(--ink); letter-spacing: 1px; min-height: 43px; }
+  .zh { margin: 0; font: 28px/1.36 var(--brush); color: var(--ink); letter-spacing: 1px; min-height: 38px; }
   .zh .ch { display: inline-block; opacity: 0; animation: ink .45s ease forwards; }
-  @keyframes ink { from { opacity: 0; transform: translateY(5px); filter: blur(2px); } to { opacity: 1; transform: none; filter: none; } }
-  .en { margin: 8px 0 0; font: 700 21px/1.15 var(--hand); color: var(--ink-soft); opacity: 0; transition: opacity .6s ease; }
-  .src { margin: 6px 0 0; font: 15px/1.2 var(--hand); color: var(--red-deep); opacity: 0; transition: opacity .6s ease .15s; }
+  @keyframes ink { from { opacity: 0; transform: translateY(4px); filter: blur(2px); } to { opacity: 1; transform: none; filter: none; } }
+  .en { margin: 6px 0 0; font: 600 23px/1.05 var(--hand); color: var(--ink-soft); opacity: 0; transition: opacity .6s ease; }
+  .src { margin: 5px 0 0; font: 500 18px/1 var(--hand); color: var(--red-deep); opacity: 0; transition: opacity .6s ease .15s; }
   .done .en, .done .src { opacity: 1; }
   .instant .ch { animation-duration: .01s !important; animation-delay: 0s !important; }
-  .stamp {
-    position: absolute; right: 10px; bottom: 10px; width: 30px; height: 30px; border-radius: 6px;
-    background: var(--red); color: #fff3df; font: 20px/30px var(--cute); transform: rotate(8deg);
-    opacity: .9;
-  }
-  .dots { display: flex; justify-content: center; gap: 6px; margin-top: 10px; }
-  .dots i { width: 6px; height: 6px; border-radius: 50%; background: #ead7c8; transition: background .3s, transform .3s; }
+  .task { display: none; margin: 8px 0 0; font: 700 23px/1 var(--hand); color: var(--red); }
+  .task small { font: 15px/1 var(--brush); color: var(--ink-soft); margin-left: 6px; }
+  .task-on .task { display: block; animation: glow 1.8s ease-in-out infinite; }
+  @keyframes glow { 0%, 100% { opacity: .65; } 50% { opacity: 1; } }
+  .row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 8px; min-height: 16px; }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 6px; height: 6px; border-radius: 50%; background: #e6d3bf; transition: background .3s, transform .3s; }
   .dots i.on { background: var(--gold-deep); transform: scale(1.35); }
+  .dots.birds i { width: 9px; height: 9px; transform: rotate(45deg); border-radius: 2px; }
+  .dots.birds i.on { background: var(--ink); transform: rotate(45deg) scale(1.15); }
+  .more { font: 600 19px/1 var(--hand); color: var(--gold-deep); opacity: 0; transition: opacity .4s ease; }
+  .can-next .more { opacity: 1; }
   .again {
-    display: none; margin: 10px auto 0; min-height: 44px; padding: 6px 20px 4px;
+    display: none; margin: 8px auto 0; min-height: 44px; padding: 4px 22px 2px;
     border: 2px solid var(--gold); border-radius: 999px; background: var(--red); color: #fff3df;
-    font: 700 22px/1 var(--hand); cursor: pointer;
+    font: 700 24px/1 var(--hand); cursor: pointer;
   }
   .the-end .again { display: block; }
+  .stamp {
+    position: absolute; right: 9px; bottom: 9px; width: 26px; height: 26px; border-radius: 5px;
+    background: var(--red); color: #fff3df; font: 17px/26px var(--brush); transform: rotate(8deg); opacity: .85;
+  }
 
   /* ---------- red envelope ---------- */
-  .hb { position: absolute; left: 85px; top: 350px; width: 210px; height: 290px; perspective: 900px; }
-  .hb.closed { animation: wiggle 3.2s ease-in-out infinite; transform-origin: 50% 100%; }
+  .hb {
+    position: absolute; left: 85px; top: 392px; width: 210px; height: 290px; perspective: 900px; z-index: 2;
+    transform-origin: 50% 100%;
+    transition: transform 1.1s cubic-bezier(.6, 0, .25, 1);
+  }
+  .hb.closed { animation: wiggle 3.4s ease-in-out infinite; }
+  .hb.small { transform: translateY(74px) scale(.5); }
   @keyframes wiggle {
     0%, 70%, 100% { transform: rotate(0); }
     74% { transform: rotate(-3deg) translateY(-2px); }
@@ -136,15 +177,13 @@
     86% { transform: rotate(1deg); }
   }
   .hb-back {
-    position: absolute; inset: 0; border-radius: 14px; z-index: 1;
-    background: linear-gradient(180deg, var(--red-dark), #9c2028 40%, var(--red-deep));
-    box-shadow: 0 24px 40px -18px rgba(0, 0, 0, .7);
+    position: absolute; inset: 0; border-radius: 12px; z-index: 1;
+    background: linear-gradient(180deg, var(--red-dark), #941d26 40%, var(--red-deep));
+    box-shadow: 0 26px 40px -18px rgba(0, 0, 0, .75);
   }
   .tail {
     position: absolute; left: 172px; top: 150px; width: 74px; height: 92px; z-index: 2;
-    transform-origin: 10% 90%;
-    animation: swish 2.4s ease-in-out infinite;
-    transition: opacity .3s ease;
+    transform-origin: 10% 90%; animation: swish 2.4s ease-in-out infinite; transition: opacity .3s ease;
   }
   @keyframes swish { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(10deg); } }
   .hb.open .tail { opacity: 0; }
@@ -167,7 +206,8 @@
   }
   .kitty.tilt .head { animation: tilt 1.1s ease-in-out; }
   @keyframes tilt { 0%, 100% { transform: rotate(0); } 40%, 60% { transform: rotate(-9deg); } }
-  .head { transform-origin: 100px 150px; }
+  .kitty.look .head { transform: rotate(-7deg) translate(-2px, -4px); transition: transform .5s ease; }
+  .head { transform-origin: 100px 150px; transition: transform .5s ease; }
   .ear-l { transform-origin: 62px 60px; animation: twitch 5s ease-in-out infinite 2s; }
   .ear-r { transform-origin: 138px 60px; animation: twitch 6.5s ease-in-out infinite 3.3s; }
   @keyframes twitch { 0%, 92%, 100% { transform: rotate(0); } 94% { transform: rotate(-10deg); } 96% { transform: rotate(4deg); } }
@@ -176,38 +216,46 @@
   .eyes-happy { display: none; }
   .kitty.happy .eyes-open { display: none; }
   .kitty.happy .eyes-happy { display: inline; }
+  .kitty.look .pupils { transform: translate(-3px, -4px); }
+  .pupils { transition: transform .4s ease; }
 
   .hb-front {
     position: absolute; left: 0; right: 0; top: 72px; bottom: 0; z-index: 4;
-    border-radius: 6px 6px 14px 14px;
+    border-radius: 5px 5px 12px 12px;
     background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Cpath d='M13 3l10 10-10 10L3 13z' fill='none' stroke='%23e9b95a' stroke-opacity='.13' stroke-width='1.5'/%3E%3C/svg%3E"),
       radial-gradient(120% 60% at 50% 0%, rgba(255, 255, 255, .12), transparent 60%),
-      linear-gradient(180deg, #e8474b, var(--red) 40%, var(--red-deep));
-    box-shadow: inset 0 0 0 2px rgba(244, 194, 91, .55), inset 0 0 0 8px var(--red), inset 0 0 0 9.5px rgba(244, 194, 91, .7);
+      linear-gradient(180deg, #e3444a, var(--red) 40%, var(--red-deep));
+    box-shadow: inset 0 0 0 2px rgba(233, 185, 90, .65), inset 0 0 0 8px var(--red), inset 0 0 0 9.5px rgba(233, 185, 90, .75);
   }
   .seal {
-    position: absolute; left: 50%; top: 92px; width: 86px; height: 86px; margin-left: -43px; border-radius: 50%;
+    position: absolute; left: 50%; top: 88px; width: 88px; height: 88px; margin-left: -44px; border-radius: 50%;
     background: radial-gradient(circle at 35% 30%, #fff1c4, var(--gold) 55%, var(--gold-deep));
-    box-shadow: 0 3px 0 #9c6a1c, inset 0 0 0 3px rgba(255, 255, 255, .35);
-    color: var(--red-deep); font: 52px/86px var(--brush); text-align: center;
+    box-shadow: 0 3px 0 #8c5e16, inset 0 0 0 3px rgba(255, 255, 255, .35), 0 0 0 4px var(--red), 0 0 0 5.5px rgba(233, 185, 90, .8);
+    color: var(--red-deep); font: 54px/88px var(--brush); text-align: center; overflow: hidden;
   }
-  .cloud-gold { position: absolute; width: 54px; opacity: .8; }
+  .seal::after {
+    content: ''; position: absolute; top: -20%; left: -60%; width: 40%; height: 140%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .55), transparent);
+    transform: rotate(20deg); animation: shine 4.5s ease-in-out infinite 1s;
+  }
+  @keyframes shine { 0%, 70% { left: -60%; } 100% { left: 130%; } }
+  .cloud-gold { position: absolute; width: 54px; opacity: .85; }
   .cloud-gold.a { left: 14px; bottom: 16px; }
   .cloud-gold.b { right: 14px; bottom: 16px; transform: scaleX(-1); }
 
   .paws {
     position: absolute; left: 5px; top: 58px; width: 200px; height: 34px; z-index: 5;
-    opacity: 0; transform: translateY(14px);
-    transition: opacity .2s ease, transform .3s ease;
+    opacity: 0; transform: translateY(14px); transition: opacity .2s ease, transform .3s ease;
   }
   .hb.open .paws { opacity: 1; transform: none; transition: opacity .25s ease .75s, transform .5s cubic-bezier(.3, 1.6, .5, 1) .75s; }
 
   .hb-flap {
     position: absolute; left: 0; top: 0; width: 210px; height: 122px; z-index: 6;
-    border-radius: 14px 14px 50% 50% / 14px 14px 62% 62%;
-    background: linear-gradient(180deg, #c42c34, #e0444a);
+    border-radius: 12px 12px 50% 50% / 12px 12px 62% 62%;
+    background: linear-gradient(180deg, #bd2a32, #dc4248);
     border-bottom: 2.5px solid var(--gold);
-    box-shadow: 0 6px 10px -4px rgba(80, 0, 0, .45);
+    box-shadow: 0 6px 10px -4px rgba(60, 0, 0, .5);
     transform-origin: 50% 0;
     transition: transform .6s cubic-bezier(.5, 0, .3, 1) .45s, z-index 0s .75s;
   }
@@ -215,68 +263,88 @@
   .clasp {
     position: absolute; left: 50%; bottom: -19px; width: 38px; height: 38px; margin-left: -19px; border-radius: 50%;
     background: radial-gradient(circle at 35% 30%, #fff1c4, var(--gold) 55%, var(--gold-deep));
-    box-shadow: 0 2px 0 #9c6a1c;
-    color: var(--red); font: 20px/38px var(--hand); text-align: center;
+    box-shadow: 0 2px 0 #8c5e16; color: var(--red); font: 700 22px/40px var(--hand); text-align: center;
     transition: opacity .2s ease;
   }
   .hb.open .clasp { opacity: 0; }
 
   .meow {
-    position: absolute; left: 150px; top: 20px; z-index: 8;
-    padding: 4px 12px 3px; border-radius: 14px; background: #fff; color: var(--red);
-    font: 20px/1 var(--cute); white-space: nowrap;
+    position: absolute; left: 250px; top: 372px; z-index: 7;
+    padding: 5px 12px 4px; border-radius: 14px; background: var(--paper); color: var(--red);
+    border: 1.5px solid var(--gold);
+    font: 19px/1 var(--cute); white-space: nowrap;
     opacity: 0; transform: translateY(6px) scale(.8);
     transition: opacity .3s ease, transform .4s cubic-bezier(.3, 1.6, .5, 1);
+    pointer-events: none;
   }
+  .meow.up { left: 258px; top: 600px; }
   .meow.show { opacity: 1; transform: none; }
 
   .hint {
-    position: absolute; left: 0; right: 0; top: 656px; text-align: center;
-    font: 700 24px/1 var(--hand); color: var(--gold-soft); letter-spacing: 1px;
-    animation: pulse 1.8s ease-in-out infinite;
-    transition: opacity .4s ease;
+    position: absolute; left: 0; right: 0; top: 704px; text-align: center;
+    font: 700 28px/1 var(--hand); color: var(--gold-bright); letter-spacing: 1px;
+    animation: pulse 1.8s ease-in-out infinite; transition: opacity .4s ease;
   }
-  .hint small { display: block; margin-top: 4px; font: 16px/1 var(--cute); color: rgba(255, 230, 168, .7); }
-  @keyframes pulse { 0%, 100% { opacity: .55; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
+  .hint small { display: block; margin-top: 4px; font: 16px/1 var(--brush); color: rgba(247, 214, 138, .7); letter-spacing: 3px; }
+  @keyframes pulse { 0%, 100% { opacity: .55; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
   .is-open .hint { opacity: 0; animation: none; }
-  .next-hint {
-    position: absolute; left: 0; right: 0; top: 664px; text-align: center;
-    font: 700 20px/1 var(--hand); color: rgba(255, 230, 168, .75);
-    opacity: 0; transition: opacity .5s ease;
-  }
-  .can-next .next-hint { opacity: 1; }
 
   @media (prefers-reduced-motion: reduce) {
-    .hb.closed, .tail, .ear-l, .ear-r, .eyes-open, .hint, .sky-lantern,
-    .hb.open .kitty .body-bob, .kitty.hop .body-bob, .kitty.tilt .head { animation: none !important; }
-    .sky-lantern { display: none; }
+    .hb.closed, .tail, .ear-l, .ear-r, .eyes-open, .hint, .palace-lantern, .gate-knot, .seal::after,
+    .hb.open .kitty .body-bob, .kitty.hop .body-bob, .kitty.tilt .head, .task-on .task { animation: none !important; }
     .zh .ch { animation-duration: .01s; animation-delay: 0s !important; }
   }
 </style>
 </head>
 <body>
 
-<canvas id="sky"></canvas>
-<div class="moon" aria-hidden="true"></div>
-<svg class="branch" viewBox="0 0 190 120" aria-hidden="true">
-  <path d="M0 22C40 30 70 44 96 70M48 36c10-14 26-20 40-20M96 70c16 8 34 12 54 8M120 76c6 12 8 24 6 38" stroke="#2a1420" stroke-width="5" fill="none" stroke-linecap="round"/>
-  <g fill="#ff9fb4" stroke="#fff" stroke-width="1">
-    <g transform="translate(88 16)"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/><circle r="2.5" fill="#f4c25b" stroke="none"/></g>
-    <g transform="translate(96 70) scale(.9)"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/><circle r="2.5" fill="#f4c25b" stroke="none"/></g>
-    <g transform="translate(150 78) scale(.8)"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/><circle r="2.5" fill="#f4c25b" stroke="none"/></g>
-    <g transform="translate(126 112) scale(.7)"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/><circle r="2.5" fill="#f4c25b" stroke="none"/></g>
-    <g transform="translate(40 32) scale(.7)"><circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/><circle r="2.5" fill="#f4c25b" stroke="none"/></g>
-  </g>
-  <circle cx="64" cy="44" r="4" fill="#ffc6d2"/><circle cx="140" cy="88" r="3.5" fill="#ffc6d2"/>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="lanternBody" x1="0" x2="1">
+      <stop offset="0" stop-color="#9e1c24"/><stop offset=".45" stop-color="#e5464b"/><stop offset="1" stop-color="#9e1c24"/>
+    </linearGradient>
+    <symbol id="palaceLantern" viewBox="0 0 42 128">
+      <line x1="21" y1="0" x2="21" y2="16" stroke="#b9832a" stroke-width="2"/>
+      <path d="M11 16h20l-3 7H14z" fill="#e9b95a"/>
+      <ellipse cx="21" cy="46" rx="19" ry="24" fill="url(#lanternBody)"/>
+      <path d="M21 23v46M12 26q-6 20 0 40M30 26q6 20 0 40" stroke="#e9b95a" stroke-width="1.2" fill="none" opacity=".75"/>
+      <path d="M14 69h14l3 6H11z" fill="#e9b95a"/>
+      <circle cx="21" cy="80" r="3" fill="#e9b95a"/>
+      <path d="M17 82l-1 40M21 82v44M25 82l1 40" stroke="#d8363c" stroke-width="2.4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="fret" viewBox="0 0 46 46">
+      <path d="M4 42V4h38M10 42V10h26v20H18V18h10" fill="none" stroke="#e9b95a" stroke-width="2" stroke-opacity=".75"/>
+    </symbol>
+  </defs>
 </svg>
-<div id="lanterns" aria-hidden="true"></div>
+
+<div class="frame" aria-hidden="true"></div>
+<svg class="corner tl" aria-hidden="true"><use href="#fret"/></svg>
+<svg class="corner tr" aria-hidden="true"><use href="#fret"/></svg>
+<svg class="corner bl" aria-hidden="true"><use href="#fret"/></svg>
+<svg class="corner br" aria-hidden="true"><use href="#fret"/></svg>
+<svg class="palace-lantern l" viewBox="0 0 42 128" aria-hidden="true"><use href="#palaceLantern"/></svg>
+<svg class="palace-lantern r" viewBox="0 0 42 128" aria-hidden="true"><use href="#palaceLantern"/></svg>
 
 <main class="scene" id="scene">
+  <div class="gate" id="gate">
+    <canvas id="sky"></canvas>
+    <div class="door l"><span class="ring"></span></div>
+    <div class="door r"><span class="ring"></span></div>
+  </div>
+  <svg class="gate-knot" viewBox="0 0 30 64" aria-hidden="true">
+    <line x1="15" y1="0" x2="15" y2="10" stroke="#e9b95a" stroke-width="2"/>
+    <path d="M15 10l9 9-9 9-9-9z" fill="#d8363c" stroke="#e9b95a" stroke-width="1.5"/>
+    <path d="M15 14l5 5-5 5-5-5z" fill="none" stroke="#e9b95a" stroke-width="1"/>
+    <path d="M12 30l-1 30M15 30v33M18 30l1 30" stroke="#d8363c" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+
   <section class="note" id="note" aria-live="polite">
     <p class="zh" id="zh" lang="zh"></p>
     <p class="en" id="en"></p>
     <p class="src" id="src"></p>
-    <div class="dots" id="dots"></div>
+    <p class="task">tap the sky to call the magpies ✦</p>
+    <div class="row"><div class="dots" id="dots"></div><span class="more">more ›</span></div>
     <button class="again" id="again" type="button">↺ again</button>
     <div class="stamp" aria-hidden="true">喵</div>
   </section>
@@ -302,9 +370,6 @@
             <g class="ear-r">
               <path d="M160 80L156 18Q138 28 116 50Z" fill="var(--cat)" stroke="var(--cat-line)" stroke-width="3" stroke-linejoin="round"/>
               <path d="M150 66L148 34Q137 42 127 52Z" fill="#ffb8c6"/>
-              <g transform="translate(150 34) scale(.7)" fill="#ff9fb4" stroke="#fff" stroke-width="1.2">
-                <circle cx="0" cy="-6" r="5"/><circle cx="5.7" cy="-1.9" r="5"/><circle cx="3.5" cy="4.9" r="5"/><circle cx="-3.5" cy="4.9" r="5"/><circle cx="-5.7" cy="-1.9" r="5"/><circle r="2.6" fill="#f4c25b" stroke="none"/>
-              </g>
             </g>
             <ellipse cx="100" cy="102" rx="76" ry="60" fill="var(--cat)" stroke="var(--cat-line)" stroke-width="3"/>
             <path d="M44 72Q56 46 84 44Q78 60 66 66Q56 70 44 72Z" fill="var(--cat-orange)"/>
@@ -312,14 +377,16 @@
             <g class="eyes-open">
               <ellipse cx="72" cy="104" rx="9.5" ry="11.5" fill="var(--cat-line)"/>
               <ellipse cx="128" cy="104" rx="9.5" ry="11.5" fill="var(--cat-line)"/>
-              <circle cx="75.5" cy="99.5" r="3.4" fill="#fff"/><circle cx="131.5" cy="99.5" r="3.4" fill="#fff"/>
-              <circle cx="69" cy="108.5" r="1.6" fill="#fff"/><circle cx="125" cy="108.5" r="1.6" fill="#fff"/>
+              <g class="pupils">
+                <circle cx="75.5" cy="99.5" r="3.4" fill="#fff"/><circle cx="131.5" cy="99.5" r="3.4" fill="#fff"/>
+                <circle cx="69" cy="108.5" r="1.6" fill="#fff"/><circle cx="125" cy="108.5" r="1.6" fill="#fff"/>
+              </g>
             </g>
             <g class="eyes-happy" fill="none" stroke="var(--cat-line)" stroke-width="4" stroke-linecap="round">
               <path d="M62 107Q72 94 82 107M118 107Q128 94 138 107"/>
             </g>
-            <ellipse cx="52" cy="124" rx="12" ry="6.5" fill="#ffa3b5" opacity=".75"/>
-            <ellipse cx="148" cy="124" rx="12" ry="6.5" fill="#ffa3b5" opacity=".75"/>
+            <ellipse cx="52" cy="124" rx="12" ry="6.5" fill="#ffa3b5" opacity=".7"/>
+            <ellipse cx="148" cy="124" rx="12" ry="6.5" fill="#ffa3b5" opacity=".7"/>
             <path d="M95 115h10l-5 5.5z" fill="#ff8aa0" stroke="#e86f86" stroke-width="1" stroke-linejoin="round"/>
             <path d="M89 124q5.5 7 11 0q5.5 7 11 0" stroke="var(--cat-line)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
             <path d="M38 112l-24-4M38 121l-25 2M162 112l24-4M162 121l25 2" stroke="var(--cat-line)" stroke-width="2" stroke-linecap="round" opacity=".55"/>
@@ -333,8 +400,8 @@
 
     <div class="hb-front">
       <div class="seal">爱</div>
-      <svg class="cloud-gold a" viewBox="0 0 60 30" aria-hidden="true"><path d="M6 24c-6 0-6-9 0-10 0-8 11-10 15-4 3-8 16-9 19 0 6-3 14 1 12 8 6 1 6 6 0 6z" fill="none" stroke="#f4c25b" stroke-width="2"/><path d="M22 20c0-5 7-5 7 0 0 3-4 3-4 0" fill="none" stroke="#f4c25b" stroke-width="2" stroke-linecap="round"/></svg>
-      <svg class="cloud-gold b" viewBox="0 0 60 30" aria-hidden="true"><path d="M6 24c-6 0-6-9 0-10 0-8 11-10 15-4 3-8 16-9 19 0 6-3 14 1 12 8 6 1 6 6 0 6z" fill="none" stroke="#f4c25b" stroke-width="2"/><path d="M22 20c0-5 7-5 7 0 0 3-4 3-4 0" fill="none" stroke="#f4c25b" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg class="cloud-gold a" viewBox="0 0 60 30" aria-hidden="true"><path d="M6 24c-6 0-6-9 0-10 0-8 11-10 15-4 3-8 16-9 19 0 6-3 14 1 12 8 6 1 6 6 0 6z" fill="none" stroke="#e9b95a" stroke-width="2"/><path d="M22 20c0-5 7-5 7 0 0 3-4 3-4 0" fill="none" stroke="#e9b95a" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg class="cloud-gold b" viewBox="0 0 60 30" aria-hidden="true"><path d="M6 24c-6 0-6-9 0-10 0-8 11-10 15-4 3-8 16-9 19 0 6-3 14 1 12 8 6 1 6 6 0 6z" fill="none" stroke="#e9b95a" stroke-width="2"/><path d="M22 20c0-5 7-5 7 0 0 3-4 3-4 0" fill="none" stroke="#e9b95a" stroke-width="2" stroke-linecap="round"/></svg>
     </div>
 
     <svg class="paws" viewBox="0 0 200 34" aria-hidden="true">
@@ -345,11 +412,10 @@
     </svg>
 
     <div class="hb-flap"><span class="clasp">♥</span></div>
-    <div class="meow" id="meow">喵～</div>
   </div>
 
+  <div class="meow" id="meow">喵～</div>
   <div class="hint" id="hint">tap ♡<small>打开红包</small></div>
-  <div class="next-hint">tap for more ♡</div>
 </main>
 
 <canvas id="fx"></canvas>
@@ -360,82 +426,67 @@
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const $ = (s) => document.querySelector(s);
-  const scene = $('#scene'), hb = $('#hb'), kitty = $('#kitty'), note = $('#note');
+  const scene = $('#scene'), hb = $('#hb'), kitty = $('#kitty'), note = $('#note'), gate = $('#gate');
   const zhEl = $('#zh'), enEl = $('#en'), srcEl = $('#src'), dotsEl = $('#dots'), meow = $('#meow');
 
-  // Classic lines of Chinese love poetry, and a couple of legends
+  const INTRO = {
+    zh: '今夜七夕，鹊桥相会',
+    en: 'Tonight is Qixi: once a year, the Weaver Girl and the Cowherd meet on a bridge of magpies.',
+    src: 'Legend of Qixi',
+  };
+  // after the lovers meet: classic lines of Chinese love poetry
   const LINES = [
+    { zh: '金风玉露一相逢，便胜却人间无数', en: 'When golden wind meets jade dew, that one meeting outshines all others in the world.', src: 'Qin Guan · on the Qixi lovers' },
+    { zh: '两情若是久长时，又岂在朝朝暮暮', en: 'If love is meant to last forever, what are a few mornings and evenings apart?', src: 'Qin Guan · Song dynasty' },
     { zh: '一日不见，如三秋兮', en: 'One day without seeing you feels like three autumns.', src: 'Book of Songs · c. 600 BC' },
     { zh: '山有木兮木有枝，心悦君兮君不知', en: 'The hills have trees, the trees have branches; my heart delights in you, and you don’t even know.', src: 'Song of the Yue Boatman' },
-    { zh: '身无彩凤双飞翼，心有灵犀一点通', en: 'I have no phoenix wings to fly to you, yet our hearts are joined by a single thread.', src: 'Li Shangyin · Tang dynasty' },
+    { zh: '身无彩凤双飞翼，心有灵犀一点通', en: 'No phoenix wings to fly to you, yet our hearts are joined by a single thread.', src: 'Li Shangyin · Tang dynasty' },
     { zh: '愿我如星君如月，夜夜流光相皎洁', en: 'Let me be the star and you the moon, shining for each other every night.', src: 'Fan Chengda · Song dynasty' },
     { zh: '海上生明月，天涯共此时', en: 'The moon rises over the sea; however far apart, we share this very moment.', src: 'Zhang Jiuling · Tang dynasty' },
     { zh: '月老的红线，一头系着我，一头系着你', en: 'The Old Man under the Moon tied a red thread: one end to me, one end to you.', src: 'Legend of Yue Lao' },
-    { zh: '金风玉露一相逢，便胜却人间无数', en: 'When golden wind meets jade dew, that one meeting outshines all others in the world.', src: 'Qin Guan · on the Qixi lovers' },
-    { zh: '两情若是久长时，又岂在朝朝暮暮', en: 'If our love is meant to last forever, what are a few mornings and evenings apart?', src: 'Qin Guan · Song dynasty' },
     { zh: '春风十里，不如你', en: 'Ten miles of spring breeze can’t compare to you.', src: 'Feng Tang' },
     { zh: '执子之手，与子偕老', en: 'To hold your hand, and grow old together with you.', src: 'Book of Songs' },
     { zh: '愿得一心人，白首不相离', en: 'I wish for one true heart, and never to part until our hair turns white.', src: 'Zhuo Wenjun · Han dynasty' },
     { zh: '喵～ 有人很爱很爱你', en: 'Meow~ someone loves you very, very much.', src: '♥ the kitten', end: true },
   ];
 
-  let state = 'closed', idx = -1, typingUntil = 0, typeTimer = 0;
+  // closed → opening → intro → bridge → meeting → reading → (again) resetting → closed
+  let state = 'closed', idx = -1, typing = false, typeTimer = 0;
+  const timers = [];
+  const later = (ms, fn) => timers.push(setTimeout(fn, ms));
 
-  // ---------- fit the 380x700 scene to any screen ----------
+  // ---------- fit the 380x760 scene to any screen ----------
+  let fitScale = 1;
   function fit() {
-    const s = Math.min(1, (innerHeight - 16) / 700, (innerWidth - 12) / 380);
-    scene.style.setProperty('--fit', s.toFixed(3));
-    resizeCanvas();
+    fitScale = Math.min(1, (innerHeight - 12) / 760, (innerWidth - 8) / 380);
+    scene.style.setProperty('--fit', fitScale.toFixed(3));
+    resizeCanvases();
   }
 
-  // ---------- progress dots ----------
-  LINES.forEach(() => dotsEl.appendChild(document.createElement('i')));
-  const dots = [...dotsEl.children];
-
-  // ---------- open / close ----------
-  function open() {
-    state = 'opening';
-    hb.classList.remove('closed');
-    hb.classList.add('open');
-    hb.setAttribute('aria-label', 'Red envelope, open');
-    document.body.classList.add('is-open');
-    meow.classList.remove('show');
-    setTimeout(() => {
-      const r = hb.getBoundingClientRect();
-      burst(r.left + r.width / 2, r.top + r.height * 0.15, 46);
-      kitty.classList.add('happy');
-    }, 650);
-    setTimeout(() => {
-      document.body.classList.add('show-note');
-      state = 'reading';
-      next();
-    }, 1250);
+  function setDots(n, on, birds) {
+    dotsEl.className = 'dots' + (birds ? ' birds' : '');
+    dotsEl.textContent = '';
+    for (let i = 0; i < n; i++) {
+      const d = document.createElement('i');
+      if (birds ? i < on : i === on) d.className = 'on';
+      dotsEl.appendChild(d);
+    }
   }
 
-  function close() {
-    state = 'closing';
-    document.body.classList.remove('show-note', 'can-next', 'is-open');
-    note.classList.remove('the-end');
-    kitty.classList.remove('happy');
-    hb.classList.remove('open');
-    setTimeout(() => {
-      hb.classList.add('closed');
-      hb.setAttribute('aria-label', 'Open the red envelope');
-      idx = -1; state = 'closed';
-    }, 1100);
+  function say(text, ms = 1500) {
+    meow.textContent = text;
+    meow.classList.add('show');
+    clearTimeout(say.t);
+    say.t = setTimeout(() => meow.classList.remove('show'), ms);
   }
 
-  // ---------- one line at a time ----------
-  function next() {
-    if (idx >= LINES.length - 1) return;
-    idx++;
-    const line = LINES[idx];
+  // ---------- text with brush-like reveal ----------
+  function write(line) {
     note.classList.remove('done', 'instant', 'the-end');
     document.body.classList.remove('can-next');
     zhEl.textContent = '';
     enEl.textContent = line.en;
     srcEl.textContent = '— ' + line.src;
-
     const step = reduced ? 0 : 85;
     let k = 0;
     for (const part of line.zh.split(/(?<=，)/)) {
@@ -451,151 +502,442 @@
       zhEl.appendChild(run);
       zhEl.appendChild(document.createTextNode(' '));
     }
-    typingUntil = performance.now() + k * step + 450;
+    typing = true;
     clearTimeout(typeTimer);
     typeTimer = setTimeout(finishTyping, k * step + 450);
-
-    dots.forEach((d, i) => d.classList.toggle('on', i === idx));
-    react(line);
   }
 
   function finishTyping() {
     clearTimeout(typeTimer);
-    typingUntil = 0;
+    if (!typing) return;
+    typing = false;
     note.classList.add('instant', 'done');
-    if (LINES[idx].end) note.classList.add('the-end');
-    else document.body.classList.add('can-next');
+    if (state === 'intro') enterBridge();
+    else if (state === 'reading') {
+      if (LINES[idx].end) note.classList.add('the-end');
+      else document.body.classList.add('can-next');
+    }
   }
 
-  // the kitten reacts to every line: a hop, a head tilt, happy eyes, hearts
-  function react(line) {
-    const moves = ['hop', 'tilt'];
-    const m = moves[idx % moves.length];
+  // ---------- flow ----------
+  function open() {
+    state = 'opening';
+    hb.classList.remove('closed');
+    hb.classList.add('open');
+    hb.setAttribute('aria-label', 'Red envelope, open');
+    document.body.classList.add('is-open');
+    meow.classList.remove('show');
+    later(650, () => {
+      const r = hb.getBoundingClientRect();
+      sparkle(r.left + r.width / 2, r.top + r.height * 0.1, 40);
+      kitty.classList.add('happy');
+    });
+    later(1500, () => {
+      hb.classList.add('small');
+      meow.classList.add('up');
+      gate.classList.add('open');
+      kitty.classList.remove('happy');
+      kitty.classList.add('look');
+    });
+    later(2700, () => {
+      document.body.classList.add('show-note');
+      state = 'intro';
+      setDots(0, 0);
+      write(INTRO);
+    });
+  }
+
+  function enterBridge() {
+    state = 'bridge';
+    note.classList.add('task-on');
+    setDots(N, 0, true);
+  }
+
+  function onLanded(count) {
+    setDots(N, count, true);
+    if (count === 3) say('more! 喵');
+    if (count === 6) say('almost there~');
+    if (count === N) {
+      state = 'meeting';
+      note.classList.remove('task-on');
+      kitty.classList.remove('look');
+      kitty.classList.add('happy');
+      startMeeting();
+    }
+  }
+
+  function afterMeeting() {
+    state = 'reading';
+    idx = -1;
+    setDots(LINES.length, 0);
+    say('喵～ ♡', 1800);
+    next();
+  }
+
+  function next() {
+    if (idx >= LINES.length - 1) return;
+    idx++;
+    write(LINES[idx]);
+    setDots(LINES.length, idx);
     kitty.classList.remove('hop', 'tilt');
     void kitty.offsetWidth; // restart the CSS animation
-    kitty.classList.add(m);
-    kitty.classList.toggle('happy', idx % 3 !== 1 || !!line.end);
+    kitty.classList.add(idx % 2 ? 'tilt' : 'hop');
+    kitty.classList.toggle('happy', idx % 3 !== 1 || !!LINES[idx].end);
     const r = kitty.getBoundingClientRect();
-    hearts(r.left + r.width / 2, r.top + r.height * 0.25, line.end ? 40 : 10);
+    hearts(r.left + r.width / 2, r.top + r.height * 0.35, LINES[idx].end ? 30 : 7);
+  }
+
+  function reset() {
+    state = 'resetting';
+    timers.splice(0).forEach(clearTimeout);
+    document.body.classList.remove('show-note', 'can-next');
+    note.classList.remove('the-end', 'task-on');
+    kitty.classList.remove('happy', 'look', 'hop', 'tilt');
+    meow.classList.remove('show');
+    hb.classList.remove('open');
+    gate.classList.remove('open');
+    later(900, () => { hb.classList.remove('small'); meow.classList.remove('up'); });
+    later(1600, resetSky);
+    later(2100, () => {
+      hb.classList.add('closed');
+      hb.setAttribute('aria-label', 'Open the red envelope');
+      document.body.classList.remove('is-open');
+      state = 'closed';
+    });
   }
 
   function onTap(e) {
-    if (e.target.closest('#again')) return;
+    if (e.target.closest && e.target.closest('#again')) return;
     if (state === 'closed') open();
-    else if (state === 'reading') {
-      if (typingUntil) finishTyping();
-      else if (!LINES[idx].end) next();
-    }
+    else if (typing) finishTyping();
+    else if (state === 'bridge') callMagpie();
+    else if (state === 'reading' && !LINES[idx].end) next();
   }
   addEventListener('click', onTap);
-  hb.addEventListener('keydown', (e) => {
+  addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTap(e); }
   });
-  $('#again').addEventListener('click', (e) => { e.stopPropagation(); close(); });
+  $('#again').addEventListener('click', (e) => { e.stopPropagation(); reset(); });
 
-  // the closed envelope says meow now and then
-  setInterval(() => {
-    if (state !== 'closed' || reduced) return;
-    meow.classList.add('show');
-    setTimeout(() => meow.classList.remove('show'), 1300);
-  }, 4200);
+  setInterval(() => { if (state === 'closed' && !reduced) say('喵～', 1300); }, 4300);
 
-  // ---------- floating sky lanterns ----------
-  if (!reduced) {
-    const box = $('#lanterns');
-    for (let i = 0; i < 9; i++) {
-      const l = document.createElement('div');
-      l.className = 'sky-lantern';
-      const dur = 22 + Math.random() * 16;
-      l.style.left = (4 + Math.random() * 92) + '%';
-      l.style.animationDuration = dur + 's';
-      l.style.animationDelay = (-Math.random() * dur) + 's';
-      l.style.setProperty('--s', (0.5 + Math.random() * 0.7).toFixed(2));
-      l.style.setProperty('--sway', ((Math.random() - 0.5) * 60).toFixed(0) + 'px');
-      box.appendChild(l);
+  // =====================================================================
+  // The sky inside the moon gate: Milky Way, Vega & Altair, magpie bridge
+  // (drawn in a 300x300 coordinate space)
+  // =====================================================================
+  const SKY = 300, N = 9;
+  const skyC = $('#sky'), sk = skyC.getContext('2d');
+  const VEGA = { x: 76, y: 94 }, ALTAIR = { x: 224, y: 210 }, CTRL = { x: 198, y: 96 };
+  const bez = (t) => ({
+    x: (1 - t) * (1 - t) * VEGA.x + 2 * (1 - t) * t * CTRL.x + t * t * ALTAIR.x,
+    y: (1 - t) * (1 - t) * VEGA.y + 2 * (1 - t) * t * CTRL.y + t * t * ALTAIR.y,
+  });
+  const bezAngle = (t) => Math.atan2(
+    2 * (1 - t) * (CTRL.y - VEGA.y) + 2 * t * (ALTAIR.y - CTRL.y),
+    2 * (1 - t) * (CTRL.x - VEGA.x) + 2 * t * (ALTAIR.x - CTRL.x));
+  const slotT = (i) => 0.1 + 0.8 * (i / (N - 1));
+
+  let birds = [], called = 0, landedCount = 0;
+  let meetStart = -1, bridgeGlowStart = -1;
+  let skyStars = [], shooting = null;
+
+  // pre-rendered Milky Way, crossing between the two stars
+  const mw = document.createElement('canvas');
+  mw.width = mw.height = 600;
+  (function paintMilkyWay() {
+    const c = mw.getContext('2d');
+    c.scale(2, 2);
+    c.translate(150, 150);
+    c.rotate(Math.atan2(VEGA.x - ALTAIR.x, ALTAIR.y - VEGA.y)); // along the band
+    const blobs = [[0, 0, 220, 46, 'rgba(150,120,220,.20)'], [-60, 6, 120, 30, 'rgba(255,170,200,.14)'],
+      [70, -4, 130, 26, 'rgba(170,190,255,.16)'], [0, 0, 240, 18, 'rgba(255,240,220,.10)']];
+    for (const [x, y, rx, ry, col] of blobs) {
+      c.save(); c.translate(x, y); c.scale(1, ry / rx);
+      const g = c.createRadialGradient(0, 0, 0, 0, 0, rx);
+      g.addColorStop(0, col); g.addColorStop(1, 'rgba(0,0,0,0)');
+      c.fillStyle = g; c.beginPath(); c.arc(0, 0, rx, 0, Math.PI * 2); c.fill(); c.restore();
+    }
+    for (let i = 0; i < 1100; i++) {
+      const x = (Math.random() - 0.5) * 460;
+      const g = (Math.random() + Math.random() + Math.random() - 1.5) * 34;
+      c.globalAlpha = 0.25 + Math.random() * 0.6;
+      c.fillStyle = Math.random() < 0.2 ? '#ffd9e6' : '#f4f1ff';
+      c.fillRect(x, g, Math.random() * 1.1 + 0.3, Math.random() * 1.1 + 0.3);
+    }
+    c.globalAlpha = 1;
+  })();
+
+  function seedSky() {
+    skyStars = Array.from({ length: 70 }, () => ({
+      x: Math.random() * SKY, y: Math.random() * SKY, r: Math.random() * 1.1 + 0.3,
+      ph: Math.random() * 6.28, sp: 0.6 + Math.random() * 1.8,
+    }));
+  }
+  seedSky();
+
+  function resetSky() {
+    birds = []; called = 0; landedCount = 0; meetStart = -1; bridgeGlowStart = -1;
+  }
+
+  function callMagpie() {
+    if (called >= N) return;
+    const slot = called++;
+    const a = Math.random() * Math.PI * 2;
+    const sx = 150 + Math.cos(a) * 190, sy = 150 + Math.sin(a) * 190;
+    const tgt = bez(slotT(slot));
+    birds.push({
+      sx, sy, tx: tgt.x, ty: tgt.y,
+      mx: (sx + tgt.x) / 2 + (Math.random() - 0.5) * 140, my: (sy + tgt.y) / 2 - 30 - Math.random() * 70,
+      slot, t0: now, dur: reduced ? 0.35 : 1.15 + Math.random() * 0.4,
+      landed: false, landAt: 0, ph: Math.random() * 6.28, ang: 0, fromAng: 0,
+    });
+    if (called % 2) { kitty.classList.remove('hop'); void kitty.offsetWidth; kitty.classList.add('hop'); }
+  }
+
+  function startMeeting() {
+    bridgeGlowStart = now;
+    meetStart = now + 0.8;
+    later(reduced ? 600 : 3900, () => {
+      const r = gate.getBoundingClientRect(), p = bez(0.5);
+      hearts(r.left + p.x / SKY * r.width, r.top + p.y / SKY * r.height, 26);
+      afterMeeting();
+    });
+  }
+
+  const ease = (u) => (u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2);
+  const angLerp = (a, b, u) => { let d = b - a; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return a + d * u; };
+
+  // a magpie seen from below: black body, white belly and wing patches, long blue-black tail
+  function drawMagpie(x, y, ang, spread, s) {
+    sk.save();
+    sk.translate(x, y); sk.rotate(ang); sk.scale(s, s);
+    sk.fillStyle = '#1d2438';
+    sk.beginPath(); sk.moveTo(-6, 0); sk.lineTo(-22, -2.8); sk.lineTo(-23.5, 0); sk.lineTo(-22, 2.8); sk.closePath(); sk.fill();
+    for (const side of [-1, 1]) {
+      const w = 17 * spread * side;
+      sk.fillStyle = '#10131d';
+      sk.beginPath();
+      sk.moveTo(3, 0); sk.quadraticCurveTo(4, w * 0.6, 0, w); sk.lineTo(-5, w * 0.92); sk.quadraticCurveTo(-4, w * 0.4, -4, 0);
+      sk.closePath(); sk.fill();
+      sk.fillStyle = 'rgba(245,245,250,.9)';
+      sk.beginPath(); sk.ellipse(-1.5, w * 0.62, 1.6, Math.abs(w) * 0.12 + 0.4, 0, 0, Math.PI * 2); sk.fill();
+    }
+    sk.fillStyle = '#10131d';
+    sk.beginPath(); sk.ellipse(0, 0, 8, 3.6, 0, 0, Math.PI * 2); sk.fill();
+    sk.fillStyle = '#f4f3f7';
+    sk.beginPath(); sk.ellipse(-1.5, 0, 3.2, 1.8, 0, 0, Math.PI * 2); sk.fill();
+    sk.fillStyle = '#10131d';
+    sk.beginPath(); sk.arc(8, 0, 3.2, 0, Math.PI * 2); sk.fill();
+    sk.restore();
+  }
+
+  function drawStar(x, y, col, tw, big) {
+    const r = (big ? 20 : 15) * (0.9 + 0.1 * tw);
+    const g = sk.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, col); g.addColorStop(0.25, col.replace(',1)', ',.35)')); g.addColorStop(1, 'rgba(0,0,0,0)');
+    sk.fillStyle = g; sk.beginPath(); sk.arc(x, y, r, 0, Math.PI * 2); sk.fill();
+    sk.strokeStyle = col.replace(',1)', ',.75)'); sk.lineWidth = 1;
+    const L = 8 + 2 * tw;
+    sk.beginPath(); sk.moveTo(x - L, y); sk.lineTo(x + L, y); sk.moveTo(x, y - L); sk.lineTo(x, y + L); sk.stroke();
+    sk.fillStyle = '#fff'; sk.beginPath(); sk.arc(x, y, 2.4, 0, Math.PI * 2); sk.fill();
+  }
+
+  function skyHeart(x, y, s, a) {
+    sk.save(); sk.translate(x, y); sk.globalAlpha = a;
+    sk.shadowColor = 'rgba(255,190,120,.9)'; sk.shadowBlur = 14;
+    sk.fillStyle = '#ffb3c4';
+    sk.beginPath();
+    sk.moveTo(0, s * 0.9);
+    sk.bezierCurveTo(-s * 1.4, 0, -s * 0.6, -s * 1.15, 0, -s * 0.35);
+    sk.bezierCurveTo(s * 0.6, -s * 1.15, s * 1.4, 0, 0, s * 0.9);
+    sk.fill(); sk.restore();
+  }
+
+  function drawSky() {
+    const res = fitScale * dpr;
+    sk.setTransform(res, 0, 0, res, 0, 0);
+    const bg = sk.createRadialGradient(150, 130, 20, 150, 150, 220);
+    bg.addColorStop(0, '#1b2150'); bg.addColorStop(1, '#070a1d');
+    sk.fillStyle = bg; sk.fillRect(0, 0, SKY, SKY);
+    sk.drawImage(mw, 0, 0, SKY, SKY);
+
+    sk.fillStyle = '#fff6e0';
+    for (const s of skyStars) {
+      sk.globalAlpha = reduced ? 0.7 : 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(now * s.sp + s.ph));
+      sk.beginPath(); sk.arc(s.x, s.y, s.r, 0, Math.PI * 2); sk.fill();
+    }
+    sk.globalAlpha = 1;
+
+    // an occasional shooting star
+    if (!reduced) {
+      if (!shooting && Math.random() < 0.004) shooting = { x: 40 + Math.random() * 220, y: 10 + Math.random() * 80, t: 0 };
+      if (shooting) {
+        shooting.t += dt;
+        const u = shooting.t / 0.8, hx = shooting.x + u * 90, hy = shooting.y + u * 45;
+        const g = sk.createLinearGradient(hx - 40, hy - 20, hx, hy);
+        g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, `rgba(255,250,230,${0.9 * (1 - u)})`);
+        sk.strokeStyle = g; sk.lineWidth = 1.4;
+        sk.beginPath(); sk.moveTo(hx - 40, hy - 20); sk.lineTo(hx, hy); sk.stroke();
+        if (u >= 1) shooting = null;
+      }
+    }
+
+    // golden glow under the finished bridge
+    if (bridgeGlowStart >= 0) {
+      const a = Math.min(1, (now - bridgeGlowStart) / 0.9);
+      sk.save();
+      sk.globalCompositeOperation = 'lighter';
+      sk.lineCap = 'round';
+      sk.shadowColor = 'rgba(255,200,110,.9)'; sk.shadowBlur = 18;
+      sk.strokeStyle = `rgba(255,190,90,${0.22 * a})`; sk.lineWidth = 20;
+      sk.beginPath(); sk.moveTo(VEGA.x, VEGA.y); sk.quadraticCurveTo(CTRL.x, CTRL.y, ALTAIR.x, ALTAIR.y); sk.stroke();
+      sk.restore();
+    }
+
+    // faint guide of where the bridge will be
+    if (state === 'bridge' && landedCount < N) {
+      sk.save();
+      sk.setLineDash([2, 7]); sk.lineCap = 'round';
+      sk.strokeStyle = 'rgba(247,214,138,.28)'; sk.lineWidth = 1.5;
+      sk.beginPath(); sk.moveTo(VEGA.x, VEGA.y); sk.quadraticCurveTo(CTRL.x, CTRL.y, ALTAIR.x, ALTAIR.y); sk.stroke();
+      sk.restore();
+    }
+
+    // magpies
+    for (const b of birds) {
+      if (!b.landed) {
+        let u = (now - b.t0) / b.dur;
+        if (u >= 1) {
+          u = 1; b.landed = true; b.landAt = now; b.fromAng = b.ang;
+          landedCount++;
+          onLanded(landedCount);
+        }
+        const e = ease(Math.min(1, u)), ie = 1 - e;
+        const x = ie * ie * b.sx + 2 * ie * e * b.mx + e * e * b.tx;
+        const y = ie * ie * b.sy + 2 * ie * e * b.my + e * e * b.ty;
+        const dx = 2 * ie * (b.mx - b.sx) + 2 * e * (b.tx - b.mx);
+        const dy = 2 * ie * (b.my - b.sy) + 2 * e * (b.ty - b.my);
+        b.ang = Math.atan2(dy, dx);
+        const flap = reduced ? 0.9 : 0.35 + 0.65 * Math.abs(Math.sin(now * 16 + b.ph));
+        drawMagpie(x, y, b.ang, flap, 1.25 - 0.25 * e);
+      }
+      if (b.landed) {
+        const u = Math.min(1, (now - b.landAt) / 0.35);
+        const tang = bezAngle(slotT(b.slot));
+        const ang = angLerp(b.fromAng, tang, u);
+        const bob = reduced ? 1 : 0.9 + 0.1 * Math.sin(now * 2.2 + b.slot);
+        drawMagpie(b.tx, b.ty, ang, bob, 1.12);
+      }
+    }
+
+    // the two lovers: Vega (Weaver Girl) and Altair (Cowherd)
+    let m = 0;
+    if (meetStart >= 0) m = ease(Math.min(1, Math.max(0, (now - meetStart) / (reduced ? 0.2 : 2.4))));
+    const pv = m > 0 ? bez(0.47 * m) : VEGA, pa = m > 0 ? bez(1 - 0.47 * m) : ALTAIR;
+    const lift = m > 0 ? 5 * Math.min(1, m * 4) : 0;
+    const tw = 0.5 + 0.5 * Math.sin(now * 2.6);
+    drawStar(pv.x, pv.y - lift, 'rgba(205,225,255,1)', tw, m >= 1);
+    drawStar(pa.x, pa.y - lift, 'rgba(255,225,160,1)', 1 - tw, m >= 1);
+    sk.globalAlpha = 0.85 * (1 - m);
+    sk.fillStyle = '#f7d68a';
+    sk.font = '15px "Ma Shan Zheng", serif';
+    sk.textAlign = 'center';
+    sk.fillText('织女', VEGA.x - 2, VEGA.y + 28);
+    sk.fillText('牛郎', ALTAIR.x + 2, ALTAIR.y + 30);
+    sk.globalAlpha = 1;
+
+    // they meet: a bloom of light and a heart above them
+    if (m >= 1) {
+      const since = now - meetStart - (reduced ? 0.2 : 2.4);
+      const p = bez(0.5);
+      if (since < 1.4) {
+        const r = 20 + since * 140, a = Math.max(0, 1 - since / 1.4);
+        const g = sk.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
+        g.addColorStop(0, `rgba(255,240,200,${0.8 * a})`); g.addColorStop(1, 'rgba(255,200,150,0)');
+        sk.fillStyle = g; sk.beginPath(); sk.arc(p.x, p.y, r, 0, Math.PI * 2); sk.fill();
+      }
+      const pulse = reduced ? 1 : 1 + 0.08 * Math.sin(now * 3);
+      skyHeart(p.x, p.y - 26, 9 * pulse * Math.min(1, since * 2), Math.min(1, since * 2));
     }
   }
 
-  // ---------- stars (sky canvas) and hearts (fx canvas) ----------
-  const sky = $('#sky'), sctx = sky.getContext('2d');
+  // ---------- screen-wide hearts & sparkles ----------
   const fx = $('#fx'), ctx = fx.getContext('2d');
-  let W = 0, H = 0, dpr = 1, stars = [];
+  let W = 0, H = 0, dpr = 1;
   const parts = [];
-  const heartColors = ['#ff6f86', '#ff9fb4', '#f4c25b', '#ffd1dc', '#e5484d'];
+  const heartColors = ['#ff7d93', '#ffb3c4', '#f7d68a', '#ffd1dc', '#e9b95a'];
 
-  function resizeCanvas() {
+  function resizeCanvases() {
     W = innerWidth; H = innerHeight; dpr = Math.min(devicePixelRatio || 1, 2);
-    for (const c of [sky, fx]) { c.width = W * dpr; c.height = H * dpr; }
-    stars = Array.from({ length: Math.round(W * H / 6000) }, () => ({
-      x: Math.random() * W, y: Math.random() * H * 0.7, r: Math.random() * 1.3 + 0.3,
-      ph: Math.random() * 6.28, sp: 0.6 + Math.random() * 1.6,
-    }));
+    fx.width = W * dpr; fx.height = H * dpr;
+    const res = fitScale * dpr;
+    skyC.width = Math.round(SKY * res); skyC.height = Math.round(SKY * res);
   }
 
-  function heart(x, y, vx, vy, size, life) {
-    return { x, y, vx, vy, size, life, age: 0, rot: (Math.random() - .5) * .6, vr: (Math.random() - .5) * 2.4,
+  function particle(kind, x, y, vx, vy, size, life) {
+    return { kind, x, y, vx, vy, size, life, age: 0, rot: (Math.random() - 0.5) * 0.6, vr: (Math.random() - 0.5) * 2.4,
       color: heartColors[(Math.random() * heartColors.length) | 0] };
   }
-  function burst(x, y, n) {
+  function sparkle(x, y, n) {
     if (reduced) return;
     for (let i = 0; i < n; i++) {
-      const a = -Math.PI / 2 + (Math.random() - .5) * Math.PI * 1.4, sp = 160 + Math.random() * 380;
-      parts.push(heart(x, y, Math.cos(a) * sp, Math.sin(a) * sp, 6 + Math.random() * 9, 2 + Math.random() * 1.2));
+      const a = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.5, sp = 140 + Math.random() * 340;
+      parts.push(particle(Math.random() < 0.35 ? 'heart' : 'spark', x, y, Math.cos(a) * sp, Math.sin(a) * sp, 5 + Math.random() * 7, 1.6 + Math.random()));
     }
   }
   function hearts(x, y, n) {
     if (reduced) return;
     for (let i = 0; i < n; i++) {
-      parts.push(heart(x + (Math.random() - .5) * 80, y, (Math.random() - .5) * 40, -60 - Math.random() * 70,
-        5 + Math.random() * 7, 2.2 + Math.random() * 1.5));
+      parts.push(particle(Math.random() < 0.6 ? 'heart' : 'spark', x + (Math.random() - 0.5) * 120, y + (Math.random() - 0.5) * 30,
+        (Math.random() - 0.5) * 50, -30 - Math.random() * 50, 4 + Math.random() * 6, 1.4 + Math.random() * 1.2));
     }
   }
 
-  function drawHeart(p, alpha) {
+  function drawParticle(p, a) {
     const s = p.size;
     ctx.save();
     ctx.translate(p.x, p.y); ctx.rotate(p.rot);
-    ctx.globalAlpha = alpha; ctx.fillStyle = p.color;
+    ctx.globalAlpha = a; ctx.fillStyle = p.color;
     ctx.beginPath();
-    ctx.moveTo(0, s * .9);
-    ctx.bezierCurveTo(-s * 1.4, 0, -s * .6, -s * 1.15, 0, -s * .35);
-    ctx.bezierCurveTo(s * .6, -s * 1.15, s * 1.4, 0, 0, s * .9);
+    if (p.kind === 'heart') {
+      ctx.moveTo(0, s * 0.9);
+      ctx.bezierCurveTo(-s * 1.4, 0, -s * 0.6, -s * 1.15, 0, -s * 0.35);
+      ctx.bezierCurveTo(s * 0.6, -s * 1.15, s * 1.4, 0, 0, s * 0.9);
+    } else {
+      // four-pointed gold spark
+      ctx.moveTo(0, -s); ctx.quadraticCurveTo(0, 0, s, 0); ctx.quadraticCurveTo(0, 0, 0, s);
+      ctx.quadraticCurveTo(0, 0, -s, 0); ctx.quadraticCurveTo(0, 0, 0, -s);
+    }
     ctx.fill();
     ctx.restore();
   }
 
-  let last = performance.now(), t = 0;
-  function frame(now) {
-    const dt = Math.min((now - last) / 1000, 0.05); last = now; t += dt;
-
-    sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    sctx.clearRect(0, 0, W, H);
-    sctx.fillStyle = '#fff6e0';
-    for (const s of stars) {
-      sctx.globalAlpha = reduced ? 0.7 : 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * s.sp + s.ph));
-      sctx.beginPath(); sctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); sctx.fill();
-    }
+  // ---------- loop ----------
+  let last = performance.now(), now = 0, dt = 0;
+  function frame(ms) {
+    dt = Math.min((ms - last) / 1000, 0.05); last = ms; now += dt;
+    drawSky();
 
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
     for (let i = parts.length - 1; i >= 0; i--) {
       const p = parts[i];
       p.age += dt;
-      if (p.vy > -80) p.vy += 140 * dt;           // bursts fall softly, floaters keep rising
-      p.vx *= Math.exp(-1.4 * dt);
-      p.x += (p.vx + Math.sin(p.age * 3 + p.rot * 10) * 14) * dt;
+      if (p.age > p.life) { parts.splice(i, 1); continue; }
+      if (p.vy > -60) p.vy += 120 * dt;
+      p.vx *= Math.exp(-1.6 * dt);
+      p.x += (p.vx + Math.sin(p.age * 3 + p.rot * 10) * 12) * dt;
       p.y += p.vy * dt;
       p.rot += p.vr * dt;
-      const a = Math.min(1, p.age * 6) * Math.max(0, 1 - Math.max(0, p.age - p.life * .55) / (p.life * .45));
-      if (p.age > p.life) { parts.splice(i, 1); continue; }
-      drawHeart(p, a);
+      const a = Math.min(1, p.age * 6) * Math.max(0, 1 - Math.max(0, p.age - p.life * 0.5) / (p.life * 0.5));
+      drawParticle(p, a);
     }
     requestAnimationFrame(frame);
   }
 
   addEventListener('resize', fit);
   fit();
-  requestAnimationFrame(frame);
+  requestAnimationFrame((ms) => { last = ms; requestAnimationFrame(frame); });
 })();
 </script>
 </body>
