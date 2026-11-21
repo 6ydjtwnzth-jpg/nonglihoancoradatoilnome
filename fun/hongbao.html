@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Love Fortune Sticks</title>
+<title>Kitten Red Envelope</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
@@ -72,67 +72,9 @@
     z-index: 5;
   }
 
-  /* fortune-stick cup (签筒) on a soft golden halo */
-  .halo {
-    position: absolute; left: 50px; top: 6px; width: 280px; height: 280px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 214, 140, .38) 0%, rgba(233, 185, 90, .14) 45%, transparent 70%);
-    pointer-events: none;
-  }
-  .rays {
-    position: absolute; inset: 0; border-radius: 50%;
-    background: repeating-conic-gradient(from 0deg, rgba(255, 220, 150, .10) 0deg 6deg, transparent 6deg 18deg);
-    -webkit-mask-image: radial-gradient(circle, #000 30%, transparent 70%);
-    mask-image: radial-gradient(circle, #000 30%, transparent 70%);
-    animation: spin 60s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .smoke { position: absolute; left: 248px; top: 104px; width: 40px; height: 150px; pointer-events: none; opacity: .5; }
-  .smoke path { animation: drift 5s ease-in-out infinite; transform-origin: 50% 100%; }
-  @keyframes drift { 0%, 100% { transform: skewX(-6deg); } 50% { transform: skewX(6deg) translateX(3px); } }
-
-  .cup {
-    position: absolute; left: 130px; top: 114px; width: 120px; height: 150px;
-    transform-origin: 50% 100%;
-    opacity: 0; transform: translateY(20px) scale(.9);
-    transition: opacity .6s ease, transform .8s cubic-bezier(.3, 1.5, .5, 1);
-  }
-  .stage-on .cup { opacity: 1; transform: none; }
-  .cup.shake { animation: shake 1.05s cubic-bezier(.36, .07, .19, .97); }
-  @keyframes shake {
-    0%, 100% { transform: rotate(0); }
-    10% { transform: rotate(-11deg) translateY(-6px); } 20% { transform: rotate(10deg) translateY(-2px); }
-    30% { transform: rotate(-12deg) translateY(-8px); } 40% { transform: rotate(11deg); }
-    50% { transform: rotate(-10deg) translateY(-6px); } 60% { transform: rotate(9deg); }
-    70% { transform: rotate(-7deg) translateY(-3px); } 80% { transform: rotate(5deg); } 90% { transform: rotate(-2deg); }
-  }
-  .cup > svg { position: absolute; left: 0; width: 120px; overflow: visible; }
-  .cup-back { top: 0; height: 30px; z-index: 1; }
-  .sticks { top: -70px; height: 100px; z-index: 2; }
-  .sticks .st { transform-box: fill-box; transform-origin: 50% 100%; }
-  .cup.shake .sticks .st { animation: rattle .18s ease-in-out 6 alternate; }
-  @keyframes rattle { from { transform: translateY(0) rotate(var(--r)); } to { transform: translateY(-7px) rotate(calc(var(--r) * -1)); } }
-  .cup-front { top: 0; height: 150px; z-index: 4; }
-  .drawn {
-    position: absolute; left: 47px; top: -40px; width: 26px; height: 170px; z-index: 3;
-    border-radius: 6px 6px 3px 3px;
-    background: linear-gradient(90deg, #c99650, #f3d9a0 45%, #d9ad66);
-    box-shadow: 0 6px 14px -4px rgba(0, 0, 0, .5), inset 0 0 0 1px rgba(120, 70, 20, .35);
-    opacity: 0; transform: translateY(40px);
-    transition: transform .45s cubic-bezier(.5, 0, .7, .4), opacity .2s ease .35s;
-    writing-mode: vertical-rl; text-orientation: upright;
-    font: 15px/26px var(--brush); color: var(--red-deep); text-align: start; letter-spacing: 0;
-    padding-top: 16px;
-  }
-  .drawn::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 12px; border-radius: 6px 6px 0 0; background: var(--red); }
-  .drawn b { font-weight: normal; color: var(--red); margin-top: 4px; }
-  .drawn.up {
-    opacity: 1; transform: translateY(-84px) rotate(-4deg) scale(1.12);
-    transition: transform .8s cubic-bezier(.25, 1.5, .45, 1), opacity .15s ease;
-  }
-
   /* message scroll */
   .note {
-    position: absolute; left: 14px; right: 14px; top: 288px;
+    position: absolute; left: 14px; right: 14px; bottom: 494px;
     padding: 16px 16px 12px;
     background:
       radial-gradient(120% 90% at 50% 0%, #fffaf0, var(--paper));
@@ -159,14 +101,12 @@
   .src { margin: 5px 0 0; font: 500 18px/1 var(--hand); color: var(--red-deep); opacity: 0; transition: opacity .6s ease .15s; }
   .done .en, .done .src { opacity: 1; }
   .instant .ch { animation-duration: .01s !important; animation-delay: 0s !important; }
-  .task { display: none; margin: 8px 0 0; font: 700 23px/1 var(--hand); color: var(--red); }
-  .task small { font: 15px/1 var(--brush); color: var(--ink-soft); margin-left: 6px; }
-  .task-on .task { display: block; animation: glow 1.8s ease-in-out infinite; }
-  @keyframes glow { 0%, 100% { opacity: .65; } 50% { opacity: 1; } }
   .row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 8px; min-height: 16px; }
   .dots { display: flex; gap: 6px; }
   .dots i { width: 6px; height: 6px; border-radius: 50%; background: #e6d3bf; transition: background .3s, transform .3s; }
   .dots i.on { background: var(--gold-deep); transform: scale(1.35); }
+  .more { font: 600 19px/1 var(--hand); color: var(--gold-deep); opacity: 0; transition: opacity .4s ease; }
+  .can-next .more { opacity: 1; }
   .again {
     display: none; margin: 8px auto 0; min-height: 44px; padding: 4px 22px 2px;
     border: 2px solid var(--gold); border-radius: 999px; background: var(--red); color: #fff3df;
@@ -185,7 +125,6 @@
     transition: transform 1.1s cubic-bezier(.6, 0, .25, 1);
   }
   .hb.closed { animation: wiggle 3.4s ease-in-out infinite; }
-  .hb.small { transform: translateY(74px) scale(.5); }
   @keyframes wiggle {
     0%, 70%, 100% { transform: rotate(0); }
     74% { transform: rotate(-3deg) translateY(-2px); }
@@ -223,7 +162,6 @@
   }
   .kitty.tilt .head { animation: tilt 1.1s ease-in-out; }
   @keyframes tilt { 0%, 100% { transform: rotate(0); } 40%, 60% { transform: rotate(-9deg); } }
-  .kitty.look .head { transform: rotate(-7deg) translate(-2px, -4px); transition: transform .5s ease; }
   .head { transform-origin: 100px 150px; transition: transform .5s ease; }
   .ear-l { transform-origin: 62px 60px; animation: twitch 5s ease-in-out infinite 2s; }
   .ear-r { transform-origin: 138px 60px; animation: twitch 6.5s ease-in-out infinite 3.3s; }
@@ -233,7 +171,6 @@
   .eyes-happy { display: none; }
   .kitty.happy .eyes-open { display: none; }
   .kitty.happy .eyes-happy { display: inline; }
-  .kitty.look .pupils { transform: translate(-3px, -4px); }
   .pupils { transition: transform .4s ease; }
 
   .hb-front {
@@ -294,7 +231,6 @@
     transition: opacity .3s ease, transform .4s cubic-bezier(.3, 1.6, .5, 1);
     pointer-events: none;
   }
-  .meow.up { left: 258px; top: 600px; }
   .meow.show { opacity: 1; transform: none; }
 
   .hint {
@@ -307,8 +243,8 @@
   .is-open .hint { opacity: 0; animation: none; }
 
   @media (prefers-reduced-motion: reduce) {
-    .hb.closed, .tail, .ear-l, .ear-r, .eyes-open, .hint, .palace-lantern, .rays, .smoke path, .seal::after,
-    .hb.open .kitty .body-bob, .kitty.hop .body-bob, .kitty.tilt .head, .task-on .task, .cup.shake, .cup.shake .sticks .st { animation: none !important; }
+    .hb.closed, .tail, .ear-l, .ear-r, .eyes-open, .hint, .palace-lantern, .seal::after,
+    .hb.open .kitty .body-bob, .kitty.hop .body-bob, .kitty.tilt .head { animation: none !important; }
     .zh .ch { animation-duration: .01s; animation-delay: 0s !important; }
   }
 </style>
@@ -344,37 +280,11 @@
 <svg class="palace-lantern r" viewBox="0 0 42 128" aria-hidden="true"><use href="#palaceLantern"/></svg>
 
 <main class="scene" id="scene">
-  <div class="halo" aria-hidden="true"><div class="rays"></div></div>
-  <svg class="smoke" viewBox="0 0 40 150" aria-hidden="true">
-    <path d="M20 150c-8-20 10-30 0-50s12-30 2-50S30 20 22 0" fill="none" stroke="#fff3df" stroke-width="2" stroke-linecap="round" opacity=".55"/>
-    <path d="M14 150c-6-24 8-34-2-54s10-28 2-46" fill="none" stroke="#fff3df" stroke-width="1.2" stroke-linecap="round" opacity=".35" style="animation-delay:-2s"/>
-  </svg>
-  <div class="cup" id="cup" aria-hidden="true">
-    <svg class="cup-back" viewBox="0 0 120 30"><ellipse cx="60" cy="14" rx="52" ry="11" fill="#3a070b"/></svg>
-    <svg class="sticks" id="sticks" viewBox="0 0 120 100"></svg>
-    <div class="drawn" id="drawn"></div>
-    <svg class="cup-front" viewBox="0 0 120 150">
-      <defs>
-        <linearGradient id="cupBody" x1="0" x2="1">
-          <stop offset="0" stop-color="#6e1118"/><stop offset=".35" stop-color="#c8333a"/><stop offset=".55" stop-color="#e2565a"/><stop offset="1" stop-color="#6e1118"/>
-        </linearGradient>
-      </defs>
-      <path d="M8 14L14 140Q60 152 106 140L112 14Q60 26 8 14Z" fill="url(#cupBody)"/>
-      <path d="M8 14Q60 26 112 14" fill="none" stroke="#e9b95a" stroke-width="3.5"/>
-      <path d="M9.5 34Q60 46 110.5 34M13 124Q60 136 107 124" fill="none" stroke="#e9b95a" stroke-width="3"/>
-      <path d="M9.8 40Q60 52 110.2 40M13.3 118Q60 130 106.7 118" fill="none" stroke="#e9b95a" stroke-width="1" opacity=".7"/>
-      <circle cx="60" cy="82" r="22" fill="#e9b95a"/>
-      <circle cx="60" cy="82" r="18.5" fill="none" stroke="#b9832a" stroke-width="1.2"/>
-      <text x="60" y="92" text-anchor="middle" font-family="Ma Shan Zheng, serif" font-size="28" fill="#ad252d">签</text>
-    </svg>
-  </div>
-
   <section class="note" id="note" aria-live="polite">
     <p class="zh" id="zh" lang="zh"></p>
     <p class="en" id="en"></p>
     <p class="src" id="src"></p>
-    <p class="task" id="task">tap the cup to shake it ✦</p>
-    <div class="row"><div class="dots" id="dots"></div></div>
+    <div class="row"><div class="dots" id="dots"></div><span class="more">more ›</span></div>
     <button class="again" id="again" type="button">↺ again</button>
     <div class="stamp" aria-hidden="true">喵</div>
   </section>
@@ -457,100 +367,52 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const $ = (s) => document.querySelector(s);
   const scene = $('#scene'), hb = $('#hb'), kitty = $('#kitty'), note = $('#note');
-  const cup = $('#cup'), drawn = $('#drawn'), sticksSvg = $('#sticks');
-  const zhEl = $('#zh'), enEl = $('#en'), srcEl = $('#src'), dotsEl = $('#dots'), meow = $('#meow'), taskEl = $('#task');
+  const zhEl = $('#zh'), enEl = $('#en'), srcEl = $('#src'), dotsEl = $('#dots'), meow = $('#meow');
 
-  const INTRO = {
-    zh: '月下求签，问一问姻缘',
-    en: 'Under the moon we draw a fortune stick, and ask the heavens about love.',
-    src: 'Temple tradition',
-  };
-  // Every stick in this cup is a "上上签" (supreme fortune): the kitten made sure of it.
-  const FORTUNES = [
-    { zh: '一日不见，如三秋兮', en: 'Reading: someone is already counting the hours until they see you again. Don’t make them wait three autumns.' },
-    { zh: '山有木兮木有枝，心悦君兮君不知', en: 'Reading: someone has a crush on you and thinks they’re being subtle. They are not.' },
-    { zh: '身无彩凤双飞翼，心有灵犀一点通', en: 'Reading: you two will finish each other’s sentences. And each other’s dumplings.' },
-    { zh: '愿我如星君如月，夜夜流光相皎洁', en: 'Forecast: clear skies, a bright moon, and someone looking at you instead of it.' },
-    { zh: '海上生明月，天涯共此时', en: 'Reading: wherever you are tonight, someone is watching the same moon and thinking of you.' },
-    { zh: '月老的红线，一头系着我，一头系着你', en: 'Reading: the red thread of fate is already tied. Untying it is not covered by the warranty.' },
-    { zh: '春风十里，不如你', en: 'Reading: spring is overrated. You are not.' },
-    { zh: '执子之手，与子偕老', en: 'Advice: hold hands more often. Side effects may include growing old together.' },
-    { zh: '两情若是久长时，又岂在朝朝暮暮', en: 'Reading: this love lasts. Still, more mornings together are strongly recommended.' },
-    { zh: '金风玉露一相逢，便胜却人间无数', en: 'Reading: one meeting was enough to outshine everyone else. Statistically impressive.' },
-    { zh: '愿得一心人，白首不相离', en: 'Lucky number: 1. Lucky person: whoever sent you this.' },
+  // Classic lines of Chinese love poetry, and a legend
+  const LINES = [
+    { zh: '一日不见，如三秋兮', en: 'One day without seeing you feels like three autumns.', src: 'Book of Songs · c. 600 BC' },
+    { zh: '山有木兮木有枝，心悦君兮君不知', en: 'The hills have trees, the trees have branches; my heart delights in you, and you don’t even know.', src: 'Song of the Yue Boatman' },
+    { zh: '身无彩凤双飞翼，心有灵犀一点通', en: 'No phoenix wings to fly to you, yet our hearts are joined by a single thread.', src: 'Li Shangyin · Tang dynasty' },
+    { zh: '愿我如星君如月，夜夜流光相皎洁', en: 'Let me be the star and you the moon, shining for each other every night.', src: 'Fan Chengda · Song dynasty' },
+    { zh: '海上生明月，天涯共此时', en: 'The moon rises over the sea; however far apart, we share this very moment.', src: 'Zhang Jiuling · Tang dynasty' },
+    { zh: '月老的红线，一头系着我，一头系着你', en: 'The Old Man under the Moon tied a red thread: one end to me, one end to you.', src: 'Legend of Yue Lao' },
+    { zh: '两情若是久长时，又岂在朝朝暮暮', en: 'If love is meant to last forever, what are a few mornings and evenings apart?', src: 'Qin Guan · Song dynasty' },
+    { zh: '春风十里，不如你', en: 'Ten miles of spring breeze can’t compare to you.', src: 'Feng Tang' },
+    { zh: '执子之手，与子偕老', en: 'To hold your hand, and grow old together with you.', src: 'Book of Songs' },
+    { zh: '愿得一心人，白首不相离', en: 'I wish for one true heart, and never to part until our hair turns white.', src: 'Zhuo Wenjun · Han dynasty' },
+    { zh: '喵～ 有人很爱很爱你', en: 'Meow~ someone loves you very, very much.', src: '♥ the kitten', end: true },
   ];
-  const FINAL = { zh: '喵～ 有人很爱很爱你', en: 'Meow~ someone loves you very, very much.', src: '♥ the kitten', end: true };
 
-  // closed → opening → intro → ready ⇄ shaking/reveal → final → (again) resetting → closed
-  let state = 'closed', typing = false, typeTimer = 0, current = null;
-  let order = [], drawnCount = 0;
+  // closed → opening → reading → (again) resetting → closed
+  let state = 'closed', idx = -1, typing = false, typeTimer = 0;
   const timers = [];
   const later = (ms, fn) => timers.push(setTimeout(fn, ms));
 
   // ---------- fit the 380x760 scene to any screen ----------
-  let fitScale = 1;
   function fit() {
-    fitScale = Math.min(1, (innerHeight - 12) / 760, (innerWidth - 8) / 380);
-    scene.style.setProperty('--fit', fitScale.toFixed(3));
+    const s = Math.min(1, (innerHeight - 12) / 760, (innerWidth - 8) / 380);
+    scene.style.setProperty('--fit', s.toFixed(3));
     resizeCanvas();
   }
 
-  // ---------- the sticks poking out of the cup ----------
-  (function buildSticks() {
-    const NS = 'http://www.w3.org/2000/svg';
-    for (let i = 0; i < 12; i++) {
-      const g = document.createElementNS(NS, 'g');
-      g.setAttribute('class', 'st');
-      const x = 20 + i * 7.3, top = 6 + Math.random() * 20, r = ((i - 5.5) * 2.4).toFixed(1);
-      g.style.setProperty('--r', r + 'deg');
-      g.style.transform = `rotate(${r}deg)`;
-      g.style.animationDelay = (-Math.random() * 0.18).toFixed(2) + 's';
-      g.innerHTML =
-        `<rect x="${x - 3}" y="${top}" width="6" height="${100 - top}" rx="2.5" fill="#e6c584" stroke="#a87a3a" stroke-width=".8"/>` +
-        `<rect x="${x - 3}" y="${top}" width="6" height="7" rx="2.5" fill="#c6303a"/>`;
-      sticksSvg.appendChild(g);
-    }
-  })();
+  LINES.forEach(() => dotsEl.appendChild(document.createElement('i')));
+  const dots = [...dotsEl.children];
 
-  // ---------- small helpers ----------
-  const CN = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
-  function cnNum(n) {
-    if (n < 10) return CN[n];
-    const t = Math.floor(n / 10), o = n % 10;
-    return (t > 1 ? CN[t] : '') + '十' + (o ? CN[o] : '');
-  }
-  function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; }
-
-  function setDots(n, on) {
-    dotsEl.textContent = '';
-    for (let i = 0; i < n; i++) {
-      const d = document.createElement('i');
-      if (i < on) d.className = 'on';
-      dotsEl.appendChild(d);
-    }
-  }
-
-  function say(text, ms = 1600) {
+  function say(text, ms = 1500) {
     meow.textContent = text;
     meow.classList.add('show');
     clearTimeout(say.t);
     say.t = setTimeout(() => meow.classList.remove('show'), ms);
   }
 
-  function bounce(cls) {
-    kitty.classList.remove('hop', 'tilt');
-    void kitty.offsetWidth; // restart the CSS animation
-    kitty.classList.add(cls);
-  }
-
   // ---------- text with brush-like reveal ----------
   function write(line) {
-    current = line;
-    note.classList.remove('done', 'instant', 'the-end', 'task-on');
+    note.classList.remove('done', 'instant', 'the-end');
     document.body.classList.remove('can-next');
     zhEl.textContent = '';
     enEl.textContent = line.en;
-    srcEl.textContent = line.src ? '— ' + line.src : '';
+    srcEl.textContent = '— ' + line.src;
     const step = reduced ? 0 : 85;
     let k = 0;
     for (const part of line.zh.split(/(?<=，)/)) {
@@ -576,12 +438,8 @@
     if (!typing) return;
     typing = false;
     note.classList.add('instant', 'done');
-    if (current.end) { note.classList.add('the-end'); state = 'final'; return; }
-    if (state === 'intro' || state === 'reveal') {
-      state = 'ready';
-      taskEl.textContent = drawnCount === 0 ? 'tap the cup to shake it ✦' : 'shake again ✦';
-      note.classList.add('task-on');
-    }
+    if (LINES[idx].end) note.classList.add('the-end');
+    else document.body.classList.add('can-next');
   }
 
   // ---------- flow ----------
@@ -594,91 +452,44 @@
     meow.classList.remove('show');
     later(650, () => {
       const r = hb.getBoundingClientRect();
-      sparkle(r.left + r.width / 2, r.top + r.height * 0.1, 40);
+      sparkle(r.left + r.width / 2, r.top + r.height * 0.1, 44);
       kitty.classList.add('happy');
     });
-    later(1500, () => {
-      hb.classList.add('small');
-      meow.classList.add('up');
-      document.body.classList.add('stage-on');
-      kitty.classList.remove('happy');
-      kitty.classList.add('look');
-    });
-    later(2500, () => {
+    later(1300, () => {
       document.body.classList.add('show-note');
-      state = 'intro';
-      order = shuffle(FORTUNES.map((f, i) => i));
-      drawnCount = 0;
-      setDots(FORTUNES.length, 0);
-      write(INTRO);
+      state = 'reading';
+      next();
     });
   }
 
-  function shakeCup() {
-    askMotion();
-    state = 'shaking';
-    note.classList.remove('task-on');
-    const wasUp = drawn.classList.contains('up');
-    drawn.classList.remove('up');
-    later(wasUp ? 420 : 0, () => {
-      cup.classList.remove('shake');
-      void cup.offsetWidth;
-      cup.classList.add('shake');
-      bounce('tilt');
-      if (!reduced && navigator.vibrate) navigator.vibrate([30, 60, 30, 60, 30]);
-    });
-    later((wasUp ? 420 : 0) + (reduced ? 100 : 1100), reveal);
-  }
-
-  function reveal() {
-    cup.classList.remove('shake');
-    if (drawnCount >= FORTUNES.length) {
-      state = 'reveal-final';
-      kitty.classList.remove('look');
-      kitty.classList.add('happy');
-      bounce('hop');
-      const r = kitty.getBoundingClientRect();
-      hearts(r.left + r.width / 2, r.top + r.height * 0.3, 30);
-      setDots(FORTUNES.length, drawnCount);
-      write(FINAL);
-      return;
-    }
-    const f = FORTUNES[order[drawnCount]];
-    const num = 1 + ((Math.random() * 99) | 0);
-    drawn.innerHTML = `第${cnNum(num)}签<b>上上</b>`;
-    drawn.classList.add('up');
-    drawnCount++;
-    setDots(FORTUNES.length, drawnCount);
-    later(reduced ? 0 : 450, () => {
-      const r = drawn.getBoundingClientRect();
-      sparkle(r.left + r.width / 2, r.top + 10, 22);
-    });
-    state = 'reveal';
-    later(reduced ? 0 : 650, () => {
-      write({ zh: f.zh, en: f.en, src: `stick no. ${num} · 上上签` });
-      kitty.classList.toggle('happy', drawnCount % 2 === 1);
-      bounce('hop');
-      if (drawnCount === 3) later(2600, () => say('psst… they’re all 上上 喵', 2600));
-      if (drawnCount === FORTUNES.length) later(2600, () => say('one more… 喵', 1800));
-    });
+  function next() {
+    if (idx >= LINES.length - 1) return;
+    idx++;
+    write(LINES[idx]);
+    dots.forEach((d, i) => d.classList.toggle('on', i === idx));
+    kitty.classList.remove('hop', 'tilt');
+    void kitty.offsetWidth; // restart the CSS animation
+    kitty.classList.add(idx % 2 ? 'tilt' : 'hop');
+    kitty.classList.toggle('happy', idx % 3 !== 1 || !!LINES[idx].end);
+    const r = kitty.getBoundingClientRect();
+    hearts(r.left + r.width / 2, r.top + r.height * 0.45, LINES[idx].end ? 30 : 7);
+    if (LINES[idx].end) later(1200, () => say('喵～ ♡', 2000));
   }
 
   function reset() {
     state = 'resetting';
     timers.splice(0).forEach(clearTimeout);
     clearTimeout(typeTimer); typing = false;
-    document.body.classList.remove('show-note', 'can-next', 'stage-on');
-    note.classList.remove('the-end', 'task-on');
-    kitty.classList.remove('happy', 'look', 'hop', 'tilt');
+    document.body.classList.remove('show-note', 'can-next');
+    note.classList.remove('the-end');
+    kitty.classList.remove('happy', 'hop', 'tilt');
     meow.classList.remove('show');
-    drawn.classList.remove('up');
-    cup.classList.remove('shake');
     hb.classList.remove('open');
-    later(900, () => { hb.classList.remove('small'); meow.classList.remove('up'); });
-    later(2100, () => {
+    later(1200, () => {
       hb.classList.add('closed');
       hb.setAttribute('aria-label', 'Open the red envelope');
       document.body.classList.remove('is-open');
+      idx = -1;
       state = 'closed';
     });
   }
@@ -686,30 +497,16 @@
   function onTap(e) {
     if (e.target.closest && e.target.closest('#again')) return;
     if (state === 'closed') open();
-    else if (typing) finishTyping();
-    else if (state === 'ready') shakeCup();
+    else if (state === 'reading') {
+      if (typing) finishTyping();
+      else if (!LINES[idx].end) next();
+    }
   }
   addEventListener('click', onTap);
   addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTap(e); }
   });
   $('#again').addEventListener('click', (e) => { e.stopPropagation(); reset(); });
-
-  // shaking the phone shakes the cup too (iOS asks permission on the first tap)
-  let motionAsked = false, lastShake = 0;
-  function askMotion() {
-    if (motionAsked) return;
-    motionAsked = true;
-    const DME = window.DeviceMotionEvent;
-    if (DME && typeof DME.requestPermission === 'function') DME.requestPermission().catch(() => {});
-  }
-  addEventListener('devicemotion', (e) => {
-    const a = e.accelerationIncludingGravity || e.acceleration;
-    if (!a || state !== 'ready') return;
-    const mag = Math.hypot(a.x || 0, a.y || 0, a.z || 0);
-    const t = performance.now();
-    if (mag > 24 && t - lastShake > 1500) { lastShake = t; shakeCup(); }
-  });
 
   setInterval(() => { if (state === 'closed' && !reduced) say('喵～', 1300); }, 4300);
 
@@ -731,14 +528,14 @@
     if (reduced) return;
     for (let i = 0; i < n; i++) {
       const a = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.5, sp = 140 + Math.random() * 300;
-      parts.push(particle(Math.random() < 0.3 ? 'heart' : 'spark', x, y, Math.cos(a) * sp, Math.sin(a) * sp, 4 + Math.random() * 7, 1.4 + Math.random()));
+      parts.push(particle(Math.random() < 0.35 ? 'heart' : 'spark', x, y, Math.cos(a) * sp, Math.sin(a) * sp, 4 + Math.random() * 7, 1.4 + Math.random()));
     }
   }
   function hearts(x, y, n) {
     if (reduced) return;
     for (let i = 0; i < n; i++) {
-      parts.push(particle(Math.random() < 0.6 ? 'heart' : 'spark', x + (Math.random() - 0.5) * 120, y + (Math.random() - 0.5) * 30,
-        (Math.random() - 0.5) * 50, -30 - Math.random() * 50, 4 + Math.random() * 6, 1.4 + Math.random() * 1.2));
+      parts.push(particle(Math.random() < 0.6 ? 'heart' : 'spark', x + (Math.random() - 0.5) * 140, y + (Math.random() - 0.5) * 30,
+        (Math.random() - 0.5) * 60, -20 - Math.random() * 40, 4 + Math.random() * 6, 1.4 + Math.random() * 1.2));
     }
   }
   function drawParticle(p, a) {
