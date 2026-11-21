@@ -264,6 +264,68 @@
   @keyframes pulse { 0%, 100% { opacity: .55; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
   .is-open .hint { opacity: 0; animation: none; }
 
+  /* ---------- the question: YES / NO ---------- */
+  .slots { display: none; justify-content: center; gap: 26px; margin: 16px 0 4px; }
+  .slot { display: block; width: 130px; height: 62px; }
+  .note.asking .slots { display: flex; }
+  .note.asking .row, .note.asking .src, .note.yay .row, .note.yay .src { display: none; }
+  .note.asking .zh { color: var(--red); }
+  .note.asking .en { font: 700 34px/1 var(--hand); color: var(--ink); margin-top: 8px; }
+  .note.yay .en { font: 700 40px/1 var(--hand); color: var(--red); margin-top: 8px; }
+
+  .btn {
+    position: fixed; left: 0; top: 0; z-index: 10; display: none;
+    min-width: 130px; min-height: 62px; padding: 10px 30px 6px;
+    border-radius: 999px;
+    font: 700 36px/1 var(--hand);
+    cursor: pointer; touch-action: none; outline: none;
+    transform: translate3d(-999px, -999px, 0);
+    transition: opacity .6s ease;
+  }
+  .btn.live { display: block; }
+  .btn.gone { opacity: 0; pointer-events: none; }
+  #yes {
+    z-index: 12; /* always on top of NO */
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Cpath d='M13 3l10 10-10 10L3 13z' fill='none' stroke='%23e9b95a' stroke-opacity='.16' stroke-width='1.5'/%3E%3C/svg%3E"),
+      linear-gradient(180deg, #e8484e 0%, var(--red-deep) 100%);
+    color: #fff3df;
+    border: 3px solid var(--gold);
+    box-shadow: 0 6px 0 #7a141b, 0 16px 30px -10px rgba(0, 0, 0, .55);
+    text-shadow: 0 2px 0 rgba(90, 10, 20, .4);
+  }
+  #yes .heart { display: inline-block; font-size: .75em; margin-left: 6px; color: var(--gold-bright); }
+  #yes:focus-visible { outline: 3px solid var(--gold-bright); outline-offset: 3px; }
+  #no {
+    background: var(--paper);
+    color: var(--ink-soft);
+    border: 3px dashed #c9a58a;
+    box-shadow: 0 5px 0 #d9c3a8;
+  }
+  #no:focus-visible { outline: 3px solid var(--gold-bright); outline-offset: 3px; }
+  .bubble {
+    position: fixed; left: 0; top: 0; z-index: 13;
+    padding: 6px 14px 5px;
+    background: var(--paper); color: var(--red);
+    border: 2px solid var(--gold); border-radius: 14px;
+    font: 22px/1 var(--cute); white-space: nowrap;
+    pointer-events: none; opacity: 0; transition: opacity .25s ease;
+  }
+  .bubble::after {
+    content: ''; position: absolute; left: 50%; bottom: -8px; width: 12px; height: 12px;
+    background: var(--paper); border-right: 2px solid var(--gold); border-bottom: 2px solid var(--gold);
+    transform: translateX(-50%) rotate(45deg);
+  }
+  .bubble.show { opacity: 1; }
+
+  /* kitten moods for the question */
+  .tear, .mouth-sad, .eyes-love { display: none; }
+  .kitty.sad .tear, .kitty.sad .mouth-sad { display: inline; }
+  .kitty.sad .mouth { display: none; }
+  .kitty.sad .pupils { transform: translateY(3px); }
+  .kitty.love .eyes-open, .kitty.love .eyes-happy { display: none; }
+  .kitty.love .eyes-love { display: inline; }
+
   @media (prefers-reduced-motion: reduce) {
     .hb.closed, .tail, .ear-l, .ear-r, .eyes-open, .hint, .palace-lantern, .seal::after, .hb.closed .clasp::after, .can-next .next,
     .hb.open .kitty .body-bob, .kitty.hop .body-bob, .kitty.tilt .head { animation: none !important; }
@@ -307,6 +369,7 @@
     <p class="en" id="en"></p>
     <p class="src" id="src"></p>
     <div class="row"><div class="dots" id="dots"></div></div>
+    <div class="slots"><span class="slot" id="slotYes"></span><span class="slot" id="slotNo"></span></div>
     <button class="next" id="next" type="button" aria-label="Next"><span>›</span></button>
     <button class="again" id="again" type="button">↺ again</button>
     <div class="stamp" aria-hidden="true">喵</div>
@@ -351,7 +414,13 @@
             <ellipse cx="52" cy="124" rx="12" ry="6.5" fill="#ffa3b5" opacity=".7"/>
             <ellipse cx="148" cy="124" rx="12" ry="6.5" fill="#ffa3b5" opacity=".7"/>
             <path d="M95 115h10l-5 5.5z" fill="#ff8aa0" stroke="#e86f86" stroke-width="1" stroke-linejoin="round"/>
-            <path d="M89 124q5.5 7 11 0q5.5 7 11 0" stroke="var(--cat-line)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+            <path class="mouth" d="M89 124q5.5 7 11 0q5.5 7 11 0" stroke="var(--cat-line)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+            <path class="mouth-sad" d="M92 130q8-7 16 0" stroke="var(--cat-line)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+            <path class="tear" d="M60 118c-5 8-5 12-1 13 4 0 5-5 1-13z" fill="#9fd8ff" stroke="#6fb8e8" stroke-width="1"/>
+            <g class="eyes-love" fill="#ff5d78" stroke="#c9304a" stroke-width="1.2">
+              <path d="M72 114c-12-7-11-16-5-17 2.5 0 4 1.5 5 3.5 1-2 2.5-3.5 5-3.5 6 1 7 10-5 17z"/>
+              <path d="M128 114c-12-7-11-16-5-17 2.5 0 4 1.5 5 3.5 1-2 2.5-3.5 5-3.5 6 1 7 10-5 17z"/>
+            </g>
             <path d="M38 112l-24-4M38 121l-25 2M162 112l24-4M162 121l25 2" stroke="var(--cat-line)" stroke-width="2" stroke-linecap="round" opacity=".55"/>
           </g>
           <path d="M50 156Q100 178 150 156" stroke="var(--red)" stroke-width="9" fill="none" stroke-linecap="round"/>
@@ -381,6 +450,9 @@
   <div class="hint" id="hint">tap the envelope ♡<small>打开红包</small></div>
 </main>
 
+<button class="btn" id="yes" type="button">YES<span class="heart">♥</span></button>
+<button class="btn" id="no" type="button">NO</button>
+<div class="bubble" id="bubble"></div>
 <canvas id="fx"></canvas>
 
 <script>
@@ -389,8 +461,10 @@
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const $ = (s) => document.querySelector(s);
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const scene = $('#scene'), hb = $('#hb'), kitty = $('#kitty'), note = $('#note');
   const zhEl = $('#zh'), enEl = $('#en'), srcEl = $('#src'), dotsEl = $('#dots'), meow = $('#meow');
+  const yesEl = $('#yes'), noEl = $('#no'), slotYes = $('#slotYes'), slotNo = $('#slotNo'), bubble = $('#bubble');
 
   // Classic lines of Chinese love poetry, and a legend
   const LINES = [
@@ -404,19 +478,24 @@
     { zh: '春风十里，不如你', en: 'Ten miles of spring breeze can’t compare to you.', src: 'Feng Tang' },
     { zh: '执子之手，与子偕老', en: 'To hold your hand, and grow old together with you.', src: 'Book of Songs' },
     { zh: '愿得一心人，白首不相离', en: 'I wish for one true heart, and never to part until our hair turns white.', src: 'Zhuo Wenjun · Han dynasty' },
-    { zh: '喵～ 有人很爱很爱你', en: 'Meow~ someone loves you very, very much.', src: '♥ the kitten', end: true },
+    { zh: '喵～ 有人很爱很爱你', en: 'Meow~ someone loves you very, very much…', src: '♥ the kitten' },
   ];
+  const QUESTION = { zh: '做我女朋友好吗？', en: 'Mei, would you like to be my girlfriend?', src: '' };
+  const YAY = { zh: '我就知道你会答应的～', en: 'Yaaay!! I knew it ♥', src: '', end: true };
 
-  // closed → opening → reading → (again) resetting → closed
-  let state = 'closed', idx = -1, typing = false, typeTimer = 0;
+  // closed → opening → reading → asking → ask (YES/NO) → yes → final → (again) resetting → closed
+  let state = 'closed', idx = -1, typing = false, typeTimer = 0, current = null;
   const timers = [];
   const later = (ms, fn) => timers.push(setTimeout(fn, ms));
 
   // ---------- fit the 380x760 scene to any screen ----------
+  let fitScale = 1;
   function fit() {
-    const s = Math.min(1, (innerHeight - 12) / 760, (innerWidth - 8) / 380);
-    scene.style.setProperty('--fit', s.toFixed(3));
+    fitScale = Math.min(1, (innerHeight - 12) / 760, (innerWidth - 8) / 380);
+    scene.style.setProperty('--fit', fitScale.toFixed(3));
+    W = innerWidth; H = innerHeight;
     resizeCanvas();
+    if (state === 'ask') { layout(dodges === 0); yes.ts = yesGrowth(); clampHome(yes); }
   }
 
   LINES.forEach(() => dotsEl.appendChild(document.createElement('i')));
@@ -429,13 +508,28 @@
     say.t = setTimeout(() => meow.classList.remove('show'), ms);
   }
 
+  let mood = '';
+  function setMood(m) {
+    if (m === mood) return;
+    if (mood) kitty.classList.remove(mood);
+    if (m) kitty.classList.add(m);
+    mood = m;
+  }
+
+  function bounce(cls) {
+    kitty.classList.remove('hop', 'tilt');
+    void kitty.offsetWidth; // restart the CSS animation
+    kitty.classList.add(cls);
+  }
+
   // ---------- text with brush-like reveal ----------
   function write(line) {
+    current = line;
     note.classList.remove('done', 'instant', 'the-end');
     document.body.classList.remove('can-next');
     zhEl.textContent = '';
     enEl.textContent = line.en;
-    srcEl.textContent = '— ' + line.src;
+    srcEl.textContent = line.src ? '— ' + line.src : '';
     const step = reduced ? 0 : 85;
     let k = 0;
     for (const part of line.zh.split(/(?<=，)/)) {
@@ -461,8 +555,9 @@
     if (!typing) return;
     typing = false;
     note.classList.add('instant', 'done');
-    if (LINES[idx].end) note.classList.add('the-end');
-    else document.body.classList.add('can-next');
+    if (current.end) { note.classList.add('the-end'); state = 'final'; }
+    else if (state === 'reading') document.body.classList.add('can-next');
+    else if (state === 'asking') later(reduced ? 0 : 350, showButtons);
   }
 
   // ---------- flow ----------
@@ -476,7 +571,7 @@
     later(650, () => {
       const r = hb.getBoundingClientRect();
       sparkle(r.left + r.width / 2, r.top + r.height * 0.1, 44);
-      kitty.classList.add('happy');
+      setMood('happy');
     });
     later(1300, () => {
       document.body.classList.add('show-note');
@@ -490,13 +585,52 @@
     idx++;
     write(LINES[idx]);
     dots.forEach((d, i) => d.classList.toggle('on', i === idx));
-    kitty.classList.remove('hop', 'tilt');
-    void kitty.offsetWidth; // restart the CSS animation
-    kitty.classList.add(idx % 2 ? 'tilt' : 'hop');
-    kitty.classList.toggle('happy', idx % 3 !== 1 || !!LINES[idx].end);
+    const last = idx === LINES.length - 1;
+    bounce(idx % 2 ? 'tilt' : 'hop');
+    setMood(idx % 3 !== 1 || last ? 'happy' : '');
     const r = kitty.getBoundingClientRect();
-    hearts(r.left + r.width / 2, r.top + r.height * 0.45, LINES[idx].end ? 30 : 7);
-    if (LINES[idx].end) later(1200, () => say('喵～ ♡', 2000));
+    hearts(r.left + r.width / 2, r.top + r.height * 0.45, last ? 24 : 7);
+    if (last) later(1200, () => say('喵～ ♡', 2000));
+  }
+
+  // after the last poem: the question, with the runaway NO
+  function propose() {
+    state = 'asking';
+    note.classList.add('asking');
+    setMood('');
+    bounce('tilt');
+    write(QUESTION);
+  }
+
+  function showButtons() {
+    if (state !== 'asking') return;
+    state = 'ask';
+    for (const el of [yesEl, noEl]) el.classList.remove('gone');
+    yesEl.classList.add('live'); noEl.classList.add('live');
+    dodges = 0; lastDodge = -99;
+    for (const b of [yes, no]) Object.assign(b, { vx: 0, vy: 0, rot: 0, vr: 0, vs: 0, ts: 1, qx: 0, vqx: 0, qy: 0, vqy: 0 });
+    layout(true);
+    yes.s = no.s = 0.3; // they pop in like jelly
+  }
+
+  let rainUntil = 0;
+  function celebrate() {
+    if (state !== 'ask') return;
+    state = 'yes';
+    const r = yesEl.getBoundingClientRect();
+    sparkle(r.left + r.width / 2, r.top + r.height / 2, reduced ? 0 : 90);
+    yesEl.classList.add('gone'); noEl.classList.add('gone');
+    yes.ts = yes.s * 1.15; yes.vs += 4;
+    no.hx = no.x; no.hy = -300; no.ts = 0.4;
+    bubble.classList.remove('show');
+    later(900, () => { yesEl.classList.remove('live'); noEl.classList.remove('live'); });
+    note.classList.remove('asking');
+    note.classList.add('yay');
+    setMood('love');
+    bounce('hop');
+    rainUntil = ptime + (reduced ? 0 : 4);
+    write(YAY);
+    later(1400, () => say('喵～ ♡', 2200));
   }
 
   function reset() {
@@ -504,9 +638,11 @@
     timers.splice(0).forEach(clearTimeout);
     clearTimeout(typeTimer); typing = false;
     document.body.classList.remove('show-note', 'can-next');
-    note.classList.remove('the-end');
-    kitty.classList.remove('happy', 'hop', 'tilt');
+    note.classList.remove('the-end', 'asking', 'yay');
+    setMood('');
+    kitty.classList.remove('hop', 'tilt');
     meow.classList.remove('show');
+    yesEl.classList.remove('live', 'gone'); noEl.classList.remove('live', 'gone');
     hb.classList.remove('open');
     later(1200, () => {
       hb.classList.add('closed');
@@ -518,29 +654,289 @@
   }
 
   function onTap(e) {
-    if (e.target.closest && e.target.closest('#again')) return;
+    if (e.target.closest && e.target.closest('#again, .btn')) return;
     if (state === 'closed') open();
-    else if (state === 'reading') {
-      if (typing) finishTyping();
-      else if (!LINES[idx].end) next();
-    }
+    else if (typing) finishTyping();
+    else if (state === 'reading') idx < LINES.length - 1 ? next() : propose();
   }
   addEventListener('click', onTap);
   addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'BUTTON') return; // let buttons work natively
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onTap(e); }
   });
   $('#again').addEventListener('click', (e) => { e.stopPropagation(); reset(); });
 
   setInterval(() => { if (state === 'closed' && !reduced) say('喵～', 1300); }, 4300);
 
+  // =====================================================================
+  // YES / NO: NO runs away from the finger, YES chases it and keeps
+  // growing until, squeezed like a balloon, it fills the whole screen.
+  // =====================================================================
+  const makeBody = (el) => ({
+    el, x: 0, y: 0, vx: 0, vy: 0, hx: 0, hy: 0, w: 0, h: 0,
+    rot: 0, vr: 0, s: 1, vs: 0, ts: 1, ph: Math.random() * Math.PI * 2,
+    qx: 0, vqx: 0, qy: 0, vqy: 0, // rubbery squash against the walls
+  });
+  const yes = makeBody(yesEl), no = makeBody(noEl);
+
+  const STEP = 1 / 240;        // fixed timestep, independent of frame rate
+  const NO_K = 70, NO_C = 10;  // underdamped spring: soft overshoot
+  const YES_K = 24, YES_C = 7; // lazier spring: YES drifts like a puppy
+  const FLEE_R = 115;          // NO starts feeling the finger from here (px from its edge)
+  const DODGE_R = 48;          // ...and hops away when it gets this close
+  const MARGIN = 14;
+  const EDGE = 6;              // YES never gets closer than this to the screen edge
+  const soft = (r) => (r < 0.8 ? r : 0.8 + 0.2 * (1 - Math.exp(-(r - 0.8) / 0.2)));
+
+  const pointer = { x: -9999, y: -9999, active: false, t: -99 };
+  let W = innerWidth, H = innerHeight;
+  let ptime = 0, dodges = 0, lastDodge = -99;
+  let yesAnchor = { x: 0, y: 0 };
+
+  function measure(b) { b.w = b.el.offsetWidth; b.h = b.el.offsetHeight; }
+
+  // Visible box of a body. YES behaves like a balloon in a box: past the screen size
+  // it is squeezed to fit, and what is squeezed on one axis bulges on the other.
+  function boxOf(b) {
+    let nw = b.w * b.s, nh = b.h * b.s;
+    if (b !== yes) return { dw: nw, dh: nh };
+    const aw = W - 2 * EDGE, ah = H - 2 * EDGE;
+    const cx = soft(nw / aw) * aw / nw, cy = soft(nh / ah) * ah / nh;
+    nw *= Math.pow(1 / cy, 0.35); nh *= Math.pow(1 / cx, 0.35);
+    return { dw: soft(nw / aw) * aw, dh: soft(nh / ah) * ah };
+  }
+  function centerOf(el) { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
+
+  function layout(reset) {
+    for (const k of ['width', 'height', 'fontSize', 'padding', 'borderWidth', 'boxShadow', 'borderRadius']) yesEl.style[k] = '';
+    measure(yes); measure(no);
+    // the slots live in the scaled scene, the buttons don't
+    slotYes.style.width = yes.w / fitScale + 'px'; slotYes.style.height = yes.h / fitScale + 'px';
+    slotNo.style.width = no.w / fitScale + 'px'; slotNo.style.height = no.h / fitScale + 'px';
+    const a = centerOf(slotYes), b = centerOf(slotNo);
+    if (reset) {
+      yes.x = yes.hx = a.x; yes.y = yes.hy = a.y;
+      no.x = no.hx = b.x; no.y = no.hy = b.y;
+      yesAnchor = a;
+    } else {
+      clampHome(no); clampHome(yes);
+      yesAnchor.x = clamp(yesAnchor.x, 0, W); yesAnchor.y = clamp(yesAnchor.y, 0, H);
+    }
+  }
+
+  function halfSize(b) { return { hw: b.w * b.ts / 2 + MARGIN, hh: b.h * b.ts / 2 + MARGIN }; }
+  function clampHome(b) {
+    const { hw, hh } = halfSize(b);
+    b.hx = 2 * hw > W ? W / 2 : clamp(b.hx, hw, W - hw);
+    b.hy = 2 * hh > H ? H / 2 : clamp(b.hy, hh, H - hh);
+  }
+
+  function rectDist(b, px, py) {
+    const { dw, dh } = boxOf(b);
+    const dx = Math.max(Math.abs(px - b.x) - dw / 2, 0);
+    const dy = Math.max(Math.abs(py - b.y) - dh / 2, 0);
+    return Math.hypot(dx, dy);
+  }
+
+  // NO picks a new resting spot: far from the finger, clear of YES, not absurdly far.
+  function dodge() {
+    if (state !== 'ask') return;
+    const { hw, hh } = halfSize(no);
+    const minFromCursor = Math.min(170, Math.min(W, H) * 0.32);
+    let best = null, bestScore = -Infinity;
+    for (let i = 0; i < 48; i++) {
+      const x = hw + Math.random() * Math.max(1, W - 2 * hw);
+      const y = hh + Math.random() * Math.max(1, H - 2 * hh);
+      const dc = Math.hypot(x - pointer.x, y - pointer.y);
+      if (dc < minFromCursor) continue;
+      const dy = Math.hypot(x - yes.x, y - yes.y);
+      if (dy < (yes.w * yes.ts + no.w) * 0.5 && i < 40) continue; // don't land on the big YES
+      const dm = Math.hypot(x - no.x, y - no.y);
+      const score = Math.min(dc, 340) + 0.6 * Math.min(dy, 200) - 0.3 * Math.max(0, dm - 240) + Math.random() * 30;
+      if (score > bestScore) { bestScore = score; best = { x, y }; }
+    }
+    if (!best) best = { x: W - no.x, y: H - no.y };
+
+    yesAnchor = { x: no.x, y: no.y }; // YES goes to take the spot NO just left
+    no.hx = best.x; no.hy = best.y;
+    clampHome(no);
+
+    let dx = no.x - pointer.x, dy = no.y - pointer.y, l = Math.hypot(dx, dy);
+    if (l < 1) { dx = best.x - no.x; dy = best.y - no.y; l = Math.hypot(dx, dy) || 1; }
+    no.vx += dx / l * 420; no.vy += dy / l * 420;
+    no.vs -= 3.2; yes.vs += 2.2;
+
+    dodges++; lastDodge = ptime;
+    no.ts = Math.max(0.74, 1 - dodges * 0.035);
+    yes.ts = yesGrowth();
+    tease();
+  }
+
+  function yesGrowth() {
+    const fill = Math.max((W - 2 * EDGE) / yes.w, (H - 2 * EDGE) / yes.h) * 1.5;
+    return Math.min(Math.pow(1.22, dodges), fill);
+  }
+
+  function spring(b, k, c, dt) {
+    b.vx += (k * (b.hx - b.x) - c * b.vx) * dt;
+    b.vy += (k * (b.hy - b.y) - c * b.vy) * dt;
+  }
+
+  // Rubbery walls: the body sinks in a little, squashes flat against the edge,
+  // gets pushed back out and wobbles. A body bigger than the screen just overflows.
+  function walls(b, dt) {
+    const box = boxOf(b), hw = box.dw / 2, hh = box.dh / 2;
+    const fitsX = 2 * hw < W, fitsY = 2 * hh < H;
+    const penL = Math.max(0, hw - b.x), penR = Math.max(0, b.x + hw - W);
+    const penT = Math.max(0, hh - b.y), penB = Math.max(0, b.y + hh - H);
+    b.vx += (penL - penR) * 900 * dt;
+    b.vy += (penT - penB) * 900 * dt;
+    if (penL || penR) b.vx *= Math.exp(-5 * dt);
+    if (penT || penB) b.vy *= Math.exp(-5 * dt);
+    if (fitsX) b.x = clamp(b.x, hw * 0.6, W - hw * 0.6);
+    if (fitsY) b.y = clamp(b.y, hh * 0.6, H - hh * 0.6);
+    const tqx = fitsX ? clamp(Math.max(penL, penR) / hw, 0, 0.32) : 0;
+    const tqy = fitsY ? clamp(Math.max(penT, penB) / hh, 0, 0.32) : 0;
+    b.vqx += (420 * (tqx - b.qx) - 12 * b.vqx) * dt; b.qx += b.vqx * dt;
+    b.vqy += (420 * (tqy - b.qy) - 12 * b.vqy) * dt; b.qy += b.vqy * dt;
+  }
+
+  function wobble(b, dt) {
+    const tr = clamp(b.vx * 0.018, -15, 15);
+    b.vr += (170 * (tr - b.rot) - 12 * b.vr) * dt; b.rot += b.vr * dt;
+    b.vs += (230 * (b.ts - b.s) - 8.5 * b.vs) * dt; b.s += b.vs * dt;
+  }
+
+  function step(dt) {
+    ptime += dt;
+    const live = pointer.active && state === 'ask';
+
+    spring(no, NO_K, NO_C, dt);
+    let dNo = Infinity;
+    if (live) {
+      dNo = rectDist(no, pointer.x, pointer.y);
+      if (dNo < FLEE_R) {
+        let dx = no.x - pointer.x, dy = no.y - pointer.y, l = Math.hypot(dx, dy);
+        if (l < 1) { dx = 1; dy = 0; l = 1; }
+        const f = (1 - dNo / FLEE_R) ** 2 * 5200;
+        no.vx += dx / l * f * dt; no.vy += dy / l * f * dt;
+        if (dNo < DODGE_R && ptime - lastDodge > 0.16) dodge();
+      }
+    }
+
+    let tx = yesAnchor.x, ty = yesAnchor.y;
+    if (live) {
+      const idle = ptime - pointer.t > 2.2;
+      const near = clamp(1 - rectDist(no, pointer.x, pointer.y) / (FLEE_R * 2.4), 0, 1);
+      let pull = dodges > 0 ? Math.min(0.3 + dodges * 0.07, 0.78) : 0.3 * near;
+      if (idle) pull *= 0.4;
+      tx += (pointer.x - tx) * pull; ty += (pointer.y - ty) * pull;
+    }
+    yes.hx = tx; yes.hy = ty; clampHome(yes);
+    spring(yes, YES_K, YES_C, dt);
+
+    if (state === 'ask' && yes.s < 1.8) {
+      const dx = no.x - yes.x, dy = no.y - yes.y, l = Math.hypot(dx, dy) || 1;
+      const minD = (Math.max(yes.w, yes.h) * yes.s + Math.max(no.w, no.h) * no.s) * 0.5;
+      if (l < minD) {
+        const f = (minD - l) * 60 * dt;
+        no.vx += dx / l * f; no.vy += dy / l * f;
+        yes.vx -= dx / l * f * 0.25; yes.vy -= dy / l * f * 0.25;
+      }
+    }
+
+    for (const b of [yes, no]) {
+      b.x += b.vx * dt; b.y += b.vy * dt;
+      wobble(b, dt);
+      if (state === 'ask') walls(b, dt);
+    }
+    return dNo;
+  }
+
+  function place(b) {
+    const isYes = b === yes;
+    const { dw, dh } = boxOf(b);
+    const calm = isYes ? clamp(1.25 - Math.max(dw / W, dh / H), 0, 1) : 1;
+    const sp = Math.hypot(b.vx, b.vy);
+    const st = Math.min(sp / 2800, 0.14) * calm;
+    const ang = Math.atan2(b.vy, b.vx) * 180 / Math.PI;
+    const breathe = reduced ? 0 : Math.sin(ptime * 2.1 + b.ph) * calm;
+    const base = (isYes ? 1 : b.s) + breathe * 0.012;
+    const sx = base * (1 - b.qx) * (1 + b.qy * 0.45);
+    const sy = base * (1 - b.qy) * (1 + b.qx * 0.45);
+    const rot = b.rot * calm;
+
+    // YES is resized for real (not scaled) so the text stays crisp and unsquashed
+    const elW = isYes ? dw : b.w, elH = isYes ? dh : b.h;
+    if (isYes) {
+      const fs = Math.min(dw / b.w, dh / b.h), lw = Math.sqrt(fs);
+      const st_ = b.el.style;
+      st_.width = dw + 'px'; st_.height = dh + 'px'; st_.padding = '0';
+      st_.fontSize = 36 * fs + 'px';
+      const press = clamp((Math.min(dw / (W - 2 * EDGE), dh / (H - 2 * EDGE)) - 0.75) / 0.25, 0, 1);
+      st_.borderRadius = Math.min(dw, dh) * (0.5 - 0.36 * press) + 'px';
+      st_.borderWidth = 3 * lw + 'px';
+      st_.boxShadow = `0 ${6 * lw}px 0 #7a141b, 0 ${16 * lw}px ${30 * lw}px -${10 * lw}px rgba(0, 0, 0, .55)`;
+    }
+
+    let cx = b.x, cy = b.y + breathe * 2.2;
+    if (isYes && state === 'ask') {
+      const r = rot * Math.PI / 180, c = Math.abs(Math.cos(r)), s = Math.abs(Math.sin(r));
+      const rw = elW / 2 * sx * (1 + st), rh = elH / 2 * sy * (1 + st);
+      const ex = rw * c + rh * s + 2, ey = rw * s + rh * c + 2 + 6 * Math.sqrt(dh / b.h);
+      cx = 2 * ex > W ? W / 2 : clamp(cx, ex, W - ex);
+      cy = 2 * ey > H ? H / 2 : clamp(cy, ey, H - ey);
+    }
+    b.el.style.transform =
+      `translate3d(${cx - elW / 2}px, ${cy - elH / 2}px, 0) ` +
+      `rotate(${ang}deg) scale(${1 + st}, ${1 - st * 0.6}) rotate(${-ang}deg) ` +
+      `rotate(${rot}deg) scale(${sx}, ${sy})`;
+  }
+
+  const teases = ['nope~', '抓不到我～', 'hehe', 'too slow!', '不要嘛～', 'try YES?', '哼～', 'nuh-uh', '再试试？'];
+  let bubbleTimer = 0, bubbleShownAt = -99, teaseIdx = 0;
+  function tease() {
+    if (ptime - bubbleShownAt < 0.7) return;
+    bubbleShownAt = ptime;
+    bubble.textContent = teases[teaseIdx++ % teases.length];
+    bubble.classList.add('show');
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(() => bubble.classList.remove('show'), 1100);
+  }
+  function placeBubble() {
+    const bw = bubble.offsetWidth, bh = bubble.offsetHeight;
+    const x = clamp(no.x - bw / 2, 6, W - bw - 6);
+    let y = no.y - no.h * no.s / 2 - bh - 14;
+    if (y < 6) y = no.y + no.h * no.s / 2 + 14;
+    bubble.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  }
+
+  function track(e) { pointer.x = e.clientX; pointer.y = e.clientY; pointer.active = true; pointer.t = ptime; }
+  addEventListener('pointermove', track, { passive: true });
+  addEventListener('pointerdown', track, { passive: true });
+  document.documentElement.addEventListener('pointerleave', () => { pointer.active = false; });
+
+  // if the NO is ever reached (fast flick, a tap, the keyboard) it still slips away
+  noEl.addEventListener('pointerdown', (e) => { e.preventDefault(); track(e); dodge(); });
+  noEl.addEventListener('click', (e) => { e.preventDefault(); dodge(); });
+  noEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      pointer.x = no.x; pointer.y = no.y; pointer.active = true; pointer.t = ptime;
+      dodge();
+      yesEl.focus();
+    }
+  });
+  yesEl.addEventListener('click', celebrate);
+
   // ---------- screen-wide hearts & sparkles ----------
   const fx = $('#fx'), ctx = fx.getContext('2d');
-  let W = 0, H = 0, dpr = 1;
+  let dpr = 1;
   const parts = [];
   const colors = ['#ff7d93', '#ffb3c4', '#f7d68a', '#ffd1dc', '#e9b95a'];
 
   function resizeCanvas() {
-    W = innerWidth; H = innerHeight; dpr = Math.min(devicePixelRatio || 1, 2);
+    dpr = Math.min(devicePixelRatio || 1, 2);
     fx.width = W * dpr; fx.height = H * dpr;
   }
   function particle(kind, x, y, vx, vy, size, life) {
@@ -550,8 +946,8 @@
   function sparkle(x, y, n) {
     if (reduced) return;
     for (let i = 0; i < n; i++) {
-      const a = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.5, sp = 140 + Math.random() * 300;
-      parts.push(particle(Math.random() < 0.35 ? 'heart' : 'spark', x, y, Math.cos(a) * sp, Math.sin(a) * sp, 4 + Math.random() * 7, 1.4 + Math.random()));
+      const a = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI * 1.5, sp = 140 + Math.random() * 380;
+      parts.push(particle(Math.random() < 0.4 ? 'heart' : 'spark', x, y, Math.cos(a) * sp, Math.sin(a) * sp, 4 + Math.random() * 8, 1.4 + Math.random() * 1.2));
     }
   }
   function hearts(x, y, n) {
@@ -580,15 +976,37 @@
     ctx.restore();
   }
 
-  let last = performance.now();
+  // ---------- loop ----------
+  let last = performance.now(), acc = 0, rainAcc = 0;
   function frame(ms) {
     const dt = Math.min((ms - last) / 1000, 0.05); last = ms;
+
+    if (state === 'ask' || state === 'yes' || state === 'final') {
+      acc += dt;
+      let dNo = Infinity;
+      while (acc >= STEP) { dNo = step(STEP); acc -= STEP; }
+      if (state === 'ask') {
+        const overYes = pointer.active && rectDist(yes, pointer.x, pointer.y) < 6;
+        setMood(overYes ? 'happy' : dNo < FLEE_R * 1.3 ? 'sad' : '');
+      }
+      if (yesEl.classList.contains('live')) { place(yes); place(no); placeBubble(); }
+      if (ptime < rainUntil) {
+        rainAcc += dt;
+        while (rainAcc > 0.07) {
+          rainAcc -= 0.07;
+          parts.push(particle('heart', Math.random() * W, -20, (Math.random() - 0.5) * 40, 50 + Math.random() * 70, 5 + Math.random() * 7, 6));
+        }
+      }
+    } else {
+      ptime += dt;
+    }
+
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
     for (let i = parts.length - 1; i >= 0; i--) {
       const p = parts[i];
       p.age += dt;
-      if (p.age > p.life) { parts.splice(i, 1); continue; }
+      if (p.age > p.life || p.y > H + 40) { parts.splice(i, 1); continue; }
       if (p.vy > -60) p.vy += 120 * dt;
       p.vx *= Math.exp(-1.6 * dt);
       p.x += (p.vx + Math.sin(p.age * 3 + p.rot * 10) * 12) * dt;
